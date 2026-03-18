@@ -1,0 +1,1867 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_dfda8f63f4ebb46828997ad6554c0746 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+<style>
+    /* Override Leaflet layer control for dark theme */
+    .leaflet-control-layers {
+        background: rgba(13,17,23,0.95) !important;
+        border: 1px solid rgba(255,255,255,0.1) !important;
+        border-radius: 8px !important;
+        padding: 10px 14px !important;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.5) !important;
+    }
+    .leaflet-control-layers-list {
+        color: #ccc !important;
+        font-family: 'Courier New', monospace !important;
+        font-size: 13px !important;
+    }
+    .leaflet-control-layers label {
+        margin-bottom: 4px;
+    }
+    .leaflet-control-layers-separator {
+        border-top-color: rgba(255,255,255,0.1) !important;
+    }
+    /* Dark popup styling */
+    .leaflet-popup-content-wrapper {
+        background: transparent !important;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.6) !important;
+        border-radius: 8px !important;
+        padding: 0 !important;
+    }
+    .leaflet-popup-content {
+        margin: 0 !important;
+    }
+    .leaflet-popup-tip {
+        background: #1a1a2e !important;
+    }
+    /* Close button */
+    .leaflet-popup-close-button {
+        color: #888 !important;
+        font-size: 20px !important;
+        padding: 8px !important;
+    }
+    .leaflet-popup-close-button:hover {
+        color: #fff !important;
+    }
+    /* Zoom control dark */
+    .leaflet-control-zoom a {
+        background: rgba(13,17,23,0.9) !important;
+        color: #ccc !important;
+        border-color: rgba(255,255,255,0.1) !important;
+    }
+    .leaflet-control-zoom a:hover {
+        background: rgba(30,30,50,0.95) !important;
+        color: #fff !important;
+    }
+    /* Attribution */
+    .leaflet-control-attribution {
+        background: rgba(13,17,23,0.7) !important;
+        color: #555 !important;
+        font-size: 9px !important;
+    }
+    .leaflet-control-attribution a {
+        color: #777 !important;
+    }
+    /* Scale */
+    .leaflet-control-scale-line {
+        background: rgba(13,17,23,0.7) !important;
+        color: #888 !important;
+        border-color: #555 !important;
+    }
+    /* Tooltip styling */
+    .leaflet-tooltip {
+        background: rgba(13,17,23,0.95) !important;
+        border: 1px solid rgba(255,255,255,0.1) !important;
+        color: #ccc !important;
+        border-radius: 4px !important;
+        padding: 6px 10px !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.5) !important;
+    }
+    .leaflet-tooltip-top:before,
+    .leaflet-tooltip-bottom:before,
+    .leaflet-tooltip-left:before,
+    .leaflet-tooltip-right:before {
+        border-top-color: rgba(13,17,23,0.95) !important;
+    }
+    /* Font Awesome */
+    @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        #info-panel h1 { font-size: 20px !important; }
+        #info-panel .stat-value { font-size: 22px !important; }
+    }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    
+<div id="info-panel" style="
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: linear-gradient(180deg, rgba(13,17,23,0.97) 0%, rgba(13,17,23,0.92) 85%, rgba(13,17,23,0) 100%);
+    padding: 18px 30px 30px 30px;
+    pointer-events: none;
+">
+    <!-- Title -->
+    <div style="text-align: center; margin-bottom: 12px;">
+        <h1 style="
+            font-family: Georgia, 'Times New Roman', serif;
+            color: #e0e0e0;
+            font-size: 26px;
+            margin: 0;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 12px rgba(0,0,0,0.7);
+        ">Erased by Concrete</h1>
+        <div style="
+            font-family: 'Courier New', monospace;
+            color: #888;
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 4px;
+        ">Atlanta's Black Neighborhoods Before &amp; After the Interstates</div>
+    </div>
+
+    <!-- Stats row -->
+    <div style="
+        display: flex;
+        justify-content: center;
+        gap: 32px;
+        flex-wrap: wrap;
+        margin-bottom: 10px;
+    ">
+        <div style="text-align: center;">
+            <div style="font-family: Georgia, serif; font-size: 28px; color: #d32f2f; font-weight: bold; text-shadow: 0 0 20px rgba(211,47,47,0.3);">~14,000</div>
+            <div style="font-family: 'Courier New', monospace; font-size: 10px; color: #888; letter-spacing: 1.5px; text-transform: uppercase;">People Displaced</div>
+        </div>
+        <div style="text-align: center;">
+            <div style="font-family: Georgia, serif; font-size: 28px; color: #e65100; font-weight: bold;">89%</div>
+            <div style="font-family: 'Courier New', monospace; font-size: 10px; color: #888; letter-spacing: 1.5px; text-transform: uppercase;">People of Color</div>
+        </div>
+        <div style="text-align: center;">
+            <div style="font-family: Georgia, serif; font-size: 28px; color: #9B2226; font-weight: bold;">~2,200</div>
+            <div style="font-family: 'Courier New', monospace; font-size: 10px; color: #888; letter-spacing: 1.5px; text-transform: uppercase;">Homes Destroyed<br><span style="font-size:9px;">(I-20 alone)</span></div>
+        </div>
+        <div style="text-align: center;">
+            <div style="font-family: Georgia, serif; font-size: 28px; color: #BC6C25; font-weight: bold;">~7,500</div>
+            <div style="font-family: 'Courier New', monospace; font-size: 10px; color: #888; letter-spacing: 1.5px; text-transform: uppercase;">Displaced by I-20</div>
+        </div>
+        <div style="text-align: center;">
+            <div style="font-family: Georgia, serif; font-size: 28px; color: #7B68AE; font-weight: bold;">$676M</div>
+            <div style="font-family: 'Courier New', monospace; font-size: 10px; color: #888; letter-spacing: 1.5px; text-transform: uppercase;">Lost Home Value<br><span style="font-size:9px;">(today's dollars)</span></div>
+        </div>
+        <div style="text-align: center;">
+            <div style="font-family: Georgia, serif; font-size: 28px; color: #606C38; font-weight: bold;">$6.4M</div>
+            <div style="font-family: 'Courier New', monospace; font-size: 10px; color: #888; letter-spacing: 1.5px; text-transform: uppercase;">Lost Tax Revenue<br><span style="font-size:9px;">/year</span></div>
+        </div>
+    </div>
+</div>
+    
+<div id="quotes-panel" style="
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: linear-gradient(0deg, rgba(13,17,23,0.97) 0%, rgba(13,17,23,0.92) 80%, rgba(13,17,23,0) 100%);
+    padding: 28px 30px 16px 30px;
+    pointer-events: none;
+">
+    <div style="max-width: 900px; margin: 0 auto;">
+        <div style="
+            font-family: Georgia, 'Times New Roman', serif;
+            color: #999;
+            font-size: 14px;
+            font-style: italic;
+            text-align: center;
+            margin-bottom: 10px;
+            line-height: 1.6;
+        ">
+            &ldquo;The proposed route of the West Expressway would be the boundary between the white and Negro communities.&rdquo;
+            <br><span style="font-style: normal; font-size: 11px; color: #666; font-family: 'Courier New', monospace; letter-spacing: 1px;">&mdash; Atlanta Bureau of Planning, 1960</span>
+        </div>
+        <div style="
+            font-family: Georgia, 'Times New Roman', serif;
+            color: #777;
+            font-size: 12px;
+            text-align: center;
+            line-height: 1.5;
+        ">
+            Mayor William Hartsfield envisioned I-20 as &ldquo;a boundary between the white and Negro communities.&rdquo;
+        </div>
+
+        <!-- Legend -->
+        <div style="
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-top: 14px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        ">
+            <div style="display:flex;align-items:center;gap:6px;">
+                <div style="width:14px;height:14px;background:#d32f2f;border-radius:2px;opacity:0.9;"></div>
+                <span style="font-family:'Courier New',monospace;font-size:10px;color:#888;letter-spacing:1px;">I-20</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;">
+                <div style="width:14px;height:14px;background:#e65100;border-radius:2px;opacity:0.9;"></div>
+                <span style="font-family:'Courier New',monospace;font-size:10px;color:#888;letter-spacing:1px;">I-75/85</span>
+            </div>
+
+            <div style="display:flex;align-items:center;gap:6px;">
+                <div style="width:14px;height:14px;background:#E07A5F;border-radius:2px;opacity:0.7;"></div>
+                <span style="font-family:'Courier New',monospace;font-size:10px;color:#888;letter-spacing:0.5px;">Summerhill</span>
+            </div>
+    
+            <div style="display:flex;align-items:center;gap:6px;">
+                <div style="width:14px;height:14px;background:#81B29A;border-radius:2px;opacity:0.7;"></div>
+                <span style="font-family:'Courier New',monospace;font-size:10px;color:#888;letter-spacing:0.5px;">Mechanicsville</span>
+            </div>
+    
+            <div style="display:flex;align-items:center;gap:6px;">
+                <div style="width:14px;height:14px;background:#F2CC8F;border-radius:2px;opacity:0.7;"></div>
+                <span style="font-family:'Courier New',monospace;font-size:10px;color:#888;letter-spacing:0.5px;">Sweet Auburn / Old Fourth Ward</span>
+            </div>
+    
+            <div style="display:flex;align-items:center;gap:6px;">
+                <div style="width:14px;height:14px;background:#7B68AE;border-radius:2px;opacity:0.7;"></div>
+                <span style="font-family:'Courier New',monospace;font-size:10px;color:#888;letter-spacing:0.5px;">Pittsburgh</span>
+            </div>
+    
+            <div style="display:flex;align-items:center;gap:6px;">
+                <div style="width:14px;height:14px;background:#BC6C25;border-radius:2px;opacity:0.7;"></div>
+                <span style="font-family:'Courier New',monospace;font-size:10px;color:#888;letter-spacing:0.5px;">Vine City / English Avenue</span>
+            </div>
+    
+            <div style="display:flex;align-items:center;gap:6px;">
+                <div style="width:14px;height:14px;background:#9B2226;border-radius:2px;opacity:0.7;"></div>
+                <span style="font-family:'Courier New',monospace;font-size:10px;color:#888;letter-spacing:0.5px;">Buttermilk Bottom</span>
+            </div>
+    
+            <div style="display:flex;align-items:center;gap:6px;">
+                <div style="width:14px;height:14px;background:#606C38;border-radius:2px;opacity:0.7;"></div>
+                <span style="font-family:'Courier New',monospace;font-size:10px;color:#888;letter-spacing:0.5px;">Peoplestown</span>
+            </div>
+    
+        </div>
+
+        <div style="
+            font-family: 'Courier New', monospace;
+            color: #555;
+            font-size: 9px;
+            text-align: center;
+            margin-top: 10px;
+            letter-spacing: 0.5px;
+        ">
+            Sources: Bayor (1996) &bull; Smart Growth America (2024) &bull; segregationbydesign.com &bull; Atlanta History Center &bull; AJC &bull; HOLC Maps &bull; GSU Planning Collection
+        </div>
+    </div>
+</div>
+    
+            <div class="folium-map" id="map_dfda8f63f4ebb46828997ad6554c0746" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_dfda8f63f4ebb46828997ad6554c0746 = L.map(
+                "map_dfda8f63f4ebb46828997ad6554c0746",
+                {
+                    center: [33.749, -84.39],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 14,
+  "zoomControl": true,
+  "preferCanvas": true,
+}
+
+                }
+            );
+            L.control.scale().addTo(map_dfda8f63f4ebb46828997ad6554c0746);
+
+            
+
+        
+    
+            var tile_layer_6bf4fc3abb1680bdb541f60e11d43cfb = L.tileLayer(
+                "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors \u0026copy; \u003ca href=\"https://carto.com/attributions\"\u003eCARTO\u003c/a\u003e",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_6bf4fc3abb1680bdb541f60e11d43cfb.addTo(map_dfda8f63f4ebb46828997ad6554c0746);
+        
+    
+            var feature_group_12d33d8b496683fc87b90a4cf3efcb77 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var polygon_a76704d185e984be68b75d2312fe4944 = L.polygon(
+                [[33.742, -84.392], [33.742, -84.38], [33.74, -84.376], [33.735, -84.374], [33.732, -84.378], [33.732, -84.388], [33.735, -84.392], [33.742, -84.392]],
+                {"bubblingMouseEvents": true, "color": "#E07A5F", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#E07A5F", "fillOpacity": 0.35, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(feature_group_12d33d8b496683fc87b90a4cf3efcb77);
+        
+    
+        var popup_2614f2748cdee76692d0ed948a0e9494 = L.popup({
+  "maxWidth": 420,
+});
+
+        
+            
+                var html_621ce1909118ca2138f223e78529bdbe = $(`<div id="html_621ce1909118ca2138f223e78529bdbe" style="width: 100.0%; height: 100.0%;">     <div style="         background: #1a1a2e;         color: #e0e0e0;         padding: 20px;         border-radius: 8px;         font-family: Georgia, 'Times New Roman', serif;         max-width: 380px;         line-height: 1.6;         border-left: 4px solid #E07A5F;     ">         <h3 style="             color: #E07A5F;             margin: 0 0 4px 0;             font-size: 20px;             letter-spacing: 0.5px;         ">Summerhill</h3>         <div style="             color: #888;             font-size: 12px;             font-family: 'Courier New', monospace;             margin-bottom: 14px;             text-transform: uppercase;             letter-spacing: 1px;         ">Founded during Reconstruction</div>          <div style="margin-bottom: 14px;">             <div style="                 color: #81B29A;                 font-size: 11px;                 font-family: 'Courier New', monospace;                 text-transform: uppercase;                 letter-spacing: 1.5px;                 margin-bottom: 6px;             ">BEFORE</div>             <p style="margin: 0; font-size: 13px; color: #ccc;">One of the first settlements of freed slaves after the Civil War. Home to Georgia's first public school for African Americans. A dense, walkable community connected to downtown by streetcar. Mixed-income with eastern and southern European immigrants.</p>         </div>          <div style="margin-bottom: 14px;">             <div style="                 color: #d32f2f;                 font-size: 11px;                 font-family: 'Courier New', monospace;                 text-transform: uppercase;                 letter-spacing: 1.5px;                 margin-bottom: 6px;             ">AFTER</div>             <p style="margin: 0; font-size: 13px; color: #ccc;">Bisected by I-20 and the I-75/85 interchange. Cut off from downtown businesses. Population cratered. Remained impoverished for decades until recent gentrification pressures.</p>         </div>          <div style="             background: #0d1117;             padding: 10px 14px;             border-radius: 4px;             margin-top: 10px;         ">             <span style="                 color: #9B2226;                 font-family: 'Courier New', monospace;                 font-size: 11px;                 text-transform: uppercase;                 letter-spacing: 1px;             ">DISPLACED:</span>             <span style="color: #e0e0e0; font-size: 14px; margin-left: 8px;">Thousands of residents</span>         </div>     </div>     </div>`)[0];
+                popup_2614f2748cdee76692d0ed948a0e9494.setContent(html_621ce1909118ca2138f223e78529bdbe);
+            
+        
+
+        polygon_a76704d185e984be68b75d2312fe4944.bindPopup(popup_2614f2748cdee76692d0ed948a0e9494)
+        ;
+
+        
+    
+    
+            polygon_a76704d185e984be68b75d2312fe4944.bindTooltip(
+                `<div>
+                     <span style="font-family: Georgia; font-size: 14px; color: #E07A5F;">Summerhill</span><br><span style="font-family: monospace; font-size: 11px; color: #888;">Founded during Reconstruction</span>
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_1e1f09bec9fbeb0004df79ac991895ef = L.marker(
+                [33.738, -84.383],
+                {
+}
+            ).addTo(feature_group_12d33d8b496683fc87b90a4cf3efcb77);
+        
+    
+            var div_icon_95b267c56c7aa9fc2590b8d6fbb88a86 = L.divIcon({
+  "html": "\u003cdiv style=\"\n                font-family: Georgia, serif;\n                font-size: 12px;\n                color: #E07A5F;\n                text-shadow: 0 0 6px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.7);\n                white-space: nowrap;\n                text-align: center;\n                font-weight: bold;\n                letter-spacing: 0.5px;\n                pointer-events: none;\n                transform: translate(-50%, -50%);\n            \"\u003eSummerhill\u003c/div\u003e",
+  "iconSize": [200, 30],
+  "iconAnchor": [100, 15],
+  "className": "empty",
+});
+        
+    
+                marker_1e1f09bec9fbeb0004df79ac991895ef.setIcon(div_icon_95b267c56c7aa9fc2590b8d6fbb88a86);
+            
+    
+            var polygon_7efc2a25097c7dfc7123a57b61ebc022 = L.polygon(
+                [[33.742, -84.41], [33.742, -84.396], [33.738, -84.393], [33.732, -84.393], [33.729, -84.398], [33.729, -84.41], [33.733, -84.413], [33.738, -84.412], [33.742, -84.41]],
+                {"bubblingMouseEvents": true, "color": "#81B29A", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#81B29A", "fillOpacity": 0.35, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(feature_group_12d33d8b496683fc87b90a4cf3efcb77);
+        
+    
+        var popup_f7f537c145f81e822d650077b39c8151 = L.popup({
+  "maxWidth": 420,
+});
+
+        
+            
+                var html_48cd089e95122454de250d14b9508f50 = $(`<div id="html_48cd089e95122454de250d14b9508f50" style="width: 100.0%; height: 100.0%;">     <div style="         background: #1a1a2e;         color: #e0e0e0;         padding: 20px;         border-radius: 8px;         font-family: Georgia, 'Times New Roman', serif;         max-width: 380px;         line-height: 1.6;         border-left: 4px solid #81B29A;     ">         <h3 style="             color: #81B29A;             margin: 0 0 4px 0;             font-size: 20px;             letter-spacing: 0.5px;         ">Mechanicsville</h3>         <div style="             color: #888;             font-size: 12px;             font-family: 'Courier New', monospace;             margin-bottom: 14px;             text-transform: uppercase;             letter-spacing: 1px;         ">Established 1870s</div>          <div style="margin-bottom: 14px;">             <div style="                 color: #81B29A;                 font-size: 11px;                 font-family: 'Courier New', monospace;                 text-transform: uppercase;                 letter-spacing: 1.5px;                 margin-bottom: 6px;             ">BEFORE</div>             <p style="margin: 0; font-size: 13px; color: #ccc;">Named for railway workers in the area. Railroads were one of few industries employing African Americans. Diverse, vibrant, uniquely mixed-income neighborhood connected to downtown by dense streetcar network.</p>         </div>          <div style="margin-bottom: 14px;">             <div style="                 color: #d32f2f;                 font-size: 11px;                 font-family: 'Courier New', monospace;                 text-transform: uppercase;                 letter-spacing: 1.5px;                 margin-bottom: 6px;             ">AFTER</div>             <p style="margin: 0; font-size: 13px; color: #ccc;">The I-75/I-20 junction wiped out hundreds of homes and businesses. Isolated from Summerhill and downtown. The neighborhood became unrecognizable compared to its previous state.</p>         </div>          <div style="             background: #0d1117;             padding: 10px 14px;             border-radius: 4px;             margin-top: 10px;         ">             <span style="                 color: #9B2226;                 font-family: 'Courier New', monospace;                 font-size: 11px;                 text-transform: uppercase;                 letter-spacing: 1px;             ">DISPLACED:</span>             <span style="color: #e0e0e0; font-size: 14px; margin-left: 8px;">Hundreds of families</span>         </div>     </div>     </div>`)[0];
+                popup_f7f537c145f81e822d650077b39c8151.setContent(html_48cd089e95122454de250d14b9508f50);
+            
+        
+
+        polygon_7efc2a25097c7dfc7123a57b61ebc022.bindPopup(popup_f7f537c145f81e822d650077b39c8151)
+        ;
+
+        
+    
+    
+            polygon_7efc2a25097c7dfc7123a57b61ebc022.bindTooltip(
+                `<div>
+                     <span style="font-family: Georgia; font-size: 14px; color: #81B29A;">Mechanicsville</span><br><span style="font-family: monospace; font-size: 11px; color: #888;">Established 1870s</span>
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_ffb2a5939e40592a0a3ed1dc6f38e8c0 = L.marker(
+                [33.737, -84.401],
+                {
+}
+            ).addTo(feature_group_12d33d8b496683fc87b90a4cf3efcb77);
+        
+    
+            var div_icon_1f688a472da985851b26d352f265c4b6 = L.divIcon({
+  "html": "\u003cdiv style=\"\n                font-family: Georgia, serif;\n                font-size: 12px;\n                color: #81B29A;\n                text-shadow: 0 0 6px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.7);\n                white-space: nowrap;\n                text-align: center;\n                font-weight: bold;\n                letter-spacing: 0.5px;\n                pointer-events: none;\n                transform: translate(-50%, -50%);\n            \"\u003eMechanicsville\u003c/div\u003e",
+  "iconSize": [200, 30],
+  "iconAnchor": [100, 15],
+  "className": "empty",
+});
+        
+    
+                marker_ffb2a5939e40592a0a3ed1dc6f38e8c0.setIcon(div_icon_1f688a472da985851b26d352f265c4b6);
+            
+    
+            var polygon_81e7ecb76406b09ba04503c79bee9603 = L.polygon(
+                [[33.762, -84.388], [33.762, -84.37], [33.758, -84.365], [33.752, -84.365], [33.748, -84.37], [33.748, -84.385], [33.752, -84.39], [33.758, -84.39], [33.762, -84.388]],
+                {"bubblingMouseEvents": true, "color": "#F2CC8F", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#F2CC8F", "fillOpacity": 0.35, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(feature_group_12d33d8b496683fc87b90a4cf3efcb77);
+        
+    
+        var popup_21724c140c6cc317e1728bbe3cb91e70 = L.popup({
+  "maxWidth": 420,
+});
+
+        
+            
+                var html_95ce5ad3206e9215b67904d04b4eb800 = $(`<div id="html_95ce5ad3206e9215b67904d04b4eb800" style="width: 100.0%; height: 100.0%;">     <div style="         background: #1a1a2e;         color: #e0e0e0;         padding: 20px;         border-radius: 8px;         font-family: Georgia, 'Times New Roman', serif;         max-width: 380px;         line-height: 1.6;         border-left: 4px solid #F2CC8F;     ">         <h3 style="             color: #F2CC8F;             margin: 0 0 4px 0;             font-size: 20px;             letter-spacing: 0.5px;         ">Sweet Auburn / Old Fourth Ward</h3>         <div style="             color: #888;             font-size: 12px;             font-family: 'Courier New', monospace;             margin-bottom: 14px;             text-transform: uppercase;             letter-spacing: 1px;         ">Late 1800s–1960s</div>          <div style="margin-bottom: 14px;">             <div style="                 color: #81B29A;                 font-size: 11px;                 font-family: 'Courier New', monospace;                 text-transform: uppercase;                 letter-spacing: 1.5px;                 margin-bottom: 6px;             ">BEFORE</div>             <p style="margin: 0; font-size: 13px; color: #ccc;">Called “The Richest Negro Street in America.” Home to Auburn Avenue — the commercial and cultural heart of Black Atlanta. Atlanta Life Insurance Company HQ. Ebenezer Baptist Church. Birthplace of Martin Luther King Jr. A thriving corridor of Black-owned businesses, churches, and institutions.</p>         </div>          <div style="margin-bottom: 14px;">             <div style="                 color: #d32f2f;                 font-size: 11px;                 font-family: 'Courier New', monospace;                 text-transform: uppercase;                 letter-spacing: 1.5px;                 margin-bottom: 6px;             ">AFTER</div>             <p style="margin: 0; font-size: 13px; color: #ccc;">I-85/Downtown Connector sliced through Auburn Avenue, creating a wall between the neighborhood and downtown. The highway was originally designed to destroy the Atlanta Life Insurance Company headquarters — community protest moved the route east, but it still severed the main street.</p>         </div>          <div style="             background: #0d1117;             padding: 10px 14px;             border-radius: 4px;             margin-top: 10px;         ">             <span style="                 color: #9B2226;                 font-family: 'Courier New', monospace;                 font-size: 11px;                 text-transform: uppercase;                 letter-spacing: 1px;             ">DISPLACED:</span>             <span style="color: #e0e0e0; font-size: 14px; margin-left: 8px;">Massive commercial and residential displacement</span>         </div>     </div>     </div>`)[0];
+                popup_21724c140c6cc317e1728bbe3cb91e70.setContent(html_95ce5ad3206e9215b67904d04b4eb800);
+            
+        
+
+        polygon_81e7ecb76406b09ba04503c79bee9603.bindPopup(popup_21724c140c6cc317e1728bbe3cb91e70)
+        ;
+
+        
+    
+    
+            polygon_81e7ecb76406b09ba04503c79bee9603.bindTooltip(
+                `<div>
+                     <span style="font-family: Georgia; font-size: 14px; color: #F2CC8F;">Sweet Auburn / Old Fourth Ward</span><br><span style="font-family: monospace; font-size: 11px; color: #888;">Late 1800s–1960s</span>
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_47551201b5e3e853d2047a8936a9cf49 = L.marker(
+                [33.756, -84.376],
+                {
+}
+            ).addTo(feature_group_12d33d8b496683fc87b90a4cf3efcb77);
+        
+    
+            var div_icon_b276ad056c2f8262ad48f2745cb16b68 = L.divIcon({
+  "html": "\u003cdiv style=\"\n                font-family: Georgia, serif;\n                font-size: 12px;\n                color: #F2CC8F;\n                text-shadow: 0 0 6px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.7);\n                white-space: nowrap;\n                text-align: center;\n                font-weight: bold;\n                letter-spacing: 0.5px;\n                pointer-events: none;\n                transform: translate(-50%, -50%);\n            \"\u003eSweet Auburn / Old Fourth Ward\u003c/div\u003e",
+  "iconSize": [200, 30],
+  "iconAnchor": [100, 15],
+  "className": "empty",
+});
+        
+    
+                marker_47551201b5e3e853d2047a8936a9cf49.setIcon(div_icon_b276ad056c2f8262ad48f2745cb16b68);
+            
+    
+            var polygon_e15e7bc0dcb32a4371ffae3a6ba65f53 = L.polygon(
+                [[33.736, -84.422], [33.736, -84.41], [33.733, -84.406], [33.728, -84.404], [33.723, -84.406], [33.722, -84.414], [33.724, -84.422], [33.73, -84.424], [33.736, -84.422]],
+                {"bubblingMouseEvents": true, "color": "#7B68AE", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#7B68AE", "fillOpacity": 0.35, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(feature_group_12d33d8b496683fc87b90a4cf3efcb77);
+        
+    
+        var popup_31a3e2c49e2b428bff5b49f12897355c = L.popup({
+  "maxWidth": 420,
+});
+
+        
+            
+                var html_562816fe321bb849583ffd089043fab7 = $(`<div id="html_562816fe321bb849583ffd089043fab7" style="width: 100.0%; height: 100.0%;">     <div style="         background: #1a1a2e;         color: #e0e0e0;         padding: 20px;         border-radius: 8px;         font-family: Georgia, 'Times New Roman', serif;         max-width: 380px;         line-height: 1.6;         border-left: 4px solid #7B68AE;     ">         <h3 style="             color: #7B68AE;             margin: 0 0 4px 0;             font-size: 20px;             letter-spacing: 0.5px;         ">Pittsburgh</h3>         <div style="             color: #888;             font-size: 12px;             font-family: 'Courier New', monospace;             margin-bottom: 14px;             text-transform: uppercase;             letter-spacing: 1px;         ">Founded 1883</div>          <div style="margin-bottom: 14px;">             <div style="                 color: #81B29A;                 font-size: 11px;                 font-family: 'Courier New', monospace;                 text-transform: uppercase;                 letter-spacing: 1.5px;                 margin-bottom: 6px;             ">BEFORE</div>             <p style="margin: 0; font-size: 13px; color: #ccc;">A Black working-class suburb founded alongside the Pegram rail shops. Named for its industrial character reminiscent of Pittsburgh, PA. A self-sustaining community with deep social networks and mutual aid traditions.</p>         </div>          <div style="margin-bottom: 14px;">             <div style="                 color: #d32f2f;                 font-size: 11px;                 font-family: 'Courier New', monospace;                 text-transform: uppercase;                 letter-spacing: 1.5px;                 margin-bottom: 6px;             ">AFTER</div>             <p style="margin: 0; font-size: 13px; color: #ccc;">Bounded on the north by I-20. Deprived of public and private investment. Population fell 50% from 7,276 in 1970 to 3,624 in 1990. Abandoned houses proliferated.</p>         </div>          <div style="             background: #0d1117;             padding: 10px 14px;             border-radius: 4px;             margin-top: 10px;         ">             <span style="                 color: #9B2226;                 font-family: 'Courier New', monospace;                 font-size: 11px;                 text-transform: uppercase;                 letter-spacing: 1px;             ">DISPLACED:</span>             <span style="color: #e0e0e0; font-size: 14px; margin-left: 8px;">Population halved over two decades</span>         </div>     </div>     </div>`)[0];
+                popup_31a3e2c49e2b428bff5b49f12897355c.setContent(html_562816fe321bb849583ffd089043fab7);
+            
+        
+
+        polygon_e15e7bc0dcb32a4371ffae3a6ba65f53.bindPopup(popup_31a3e2c49e2b428bff5b49f12897355c)
+        ;
+
+        
+    
+    
+            polygon_e15e7bc0dcb32a4371ffae3a6ba65f53.bindTooltip(
+                `<div>
+                     <span style="font-family: Georgia; font-size: 14px; color: #7B68AE;">Pittsburgh</span><br><span style="font-family: monospace; font-size: 11px; color: #888;">Founded 1883</span>
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_bbf8c4cb2567560f5cd828748bfe5618 = L.marker(
+                [33.73, -84.413],
+                {
+}
+            ).addTo(feature_group_12d33d8b496683fc87b90a4cf3efcb77);
+        
+    
+            var div_icon_f3dfecb50557f7d3156329a820ef2075 = L.divIcon({
+  "html": "\u003cdiv style=\"\n                font-family: Georgia, serif;\n                font-size: 12px;\n                color: #7B68AE;\n                text-shadow: 0 0 6px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.7);\n                white-space: nowrap;\n                text-align: center;\n                font-weight: bold;\n                letter-spacing: 0.5px;\n                pointer-events: none;\n                transform: translate(-50%, -50%);\n            \"\u003ePittsburgh\u003c/div\u003e",
+  "iconSize": [200, 30],
+  "iconAnchor": [100, 15],
+  "className": "empty",
+});
+        
+    
+                marker_bbf8c4cb2567560f5cd828748bfe5618.setIcon(div_icon_f3dfecb50557f7d3156329a820ef2075);
+            
+    
+            var polygon_1598cae9048aa87dc501577f55ac9469 = L.polygon(
+                [[33.764, -84.425], [33.764, -84.408], [33.76, -84.405], [33.754, -84.405], [33.75, -84.408], [33.75, -84.42], [33.754, -84.426], [33.76, -84.426], [33.764, -84.425]],
+                {"bubblingMouseEvents": true, "color": "#BC6C25", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#BC6C25", "fillOpacity": 0.35, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(feature_group_12d33d8b496683fc87b90a4cf3efcb77);
+        
+    
+        var popup_400344ed86bff129e7f35dbbafe8a5ca = L.popup({
+  "maxWidth": 420,
+});
+
+        
+            
+                var html_ccd3e3a7b17e9e226227ed9ddc9c2848 = $(`<div id="html_ccd3e3a7b17e9e226227ed9ddc9c2848" style="width: 100.0%; height: 100.0%;">     <div style="         background: #1a1a2e;         color: #e0e0e0;         padding: 20px;         border-radius: 8px;         font-family: Georgia, 'Times New Roman', serif;         max-width: 380px;         line-height: 1.6;         border-left: 4px solid #BC6C25;     ">         <h3 style="             color: #BC6C25;             margin: 0 0 4px 0;             font-size: 20px;             letter-spacing: 0.5px;         ">Vine City / English Avenue</h3>         <div style="             color: #888;             font-size: 12px;             font-family: 'Courier New', monospace;             margin-bottom: 14px;             text-transform: uppercase;             letter-spacing: 1px;         ">Early 1900s</div>          <div style="margin-bottom: 14px;">             <div style="                 color: #81B29A;                 font-size: 11px;                 font-family: 'Courier New', monospace;                 text-transform: uppercase;                 letter-spacing: 1.5px;                 margin-bottom: 6px;             ">BEFORE</div>             <p style="margin: 0; font-size: 13px; color: #ccc;">Home to the Atlanta University Center consortium of HBCUs. A middle-class Black neighborhood with strong institutional anchors. Dense residential streets with community infrastructure.</p>         </div>          <div style="margin-bottom: 14px;">             <div style="                 color: #d32f2f;                 font-size: 11px;                 font-family: 'Courier New', monospace;                 text-transform: uppercase;                 letter-spacing: 1.5px;                 margin-bottom: 6px;             ">AFTER</div>             <p style="margin: 0; font-size: 13px; color: #ccc;">Cut off by highway construction and urban renewal. Redlined and disinvested. Became one of Atlanta's most impoverished areas despite proximity to downtown and major institutions.</p>         </div>          <div style="             background: #0d1117;             padding: 10px 14px;             border-radius: 4px;             margin-top: 10px;         ">             <span style="                 color: #9B2226;                 font-family: 'Courier New', monospace;                 font-size: 11px;                 text-transform: uppercase;                 letter-spacing: 1px;             ">DISPLACED:</span>             <span style="color: #e0e0e0; font-size: 14px; margin-left: 8px;">Significant residential displacement</span>         </div>     </div>     </div>`)[0];
+                popup_400344ed86bff129e7f35dbbafe8a5ca.setContent(html_ccd3e3a7b17e9e226227ed9ddc9c2848);
+            
+        
+
+        polygon_1598cae9048aa87dc501577f55ac9469.bindPopup(popup_400344ed86bff129e7f35dbbafe8a5ca)
+        ;
+
+        
+    
+    
+            polygon_1598cae9048aa87dc501577f55ac9469.bindTooltip(
+                `<div>
+                     <span style="font-family: Georgia; font-size: 14px; color: #BC6C25;">Vine City / English Avenue</span><br><span style="font-family: monospace; font-size: 11px; color: #888;">Early 1900s</span>
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_7a9439fbeba4fb5c79e0c0d42a16a665 = L.marker(
+                [33.758, -84.415],
+                {
+}
+            ).addTo(feature_group_12d33d8b496683fc87b90a4cf3efcb77);
+        
+    
+            var div_icon_299a5e2160eab9523621afbbe1293274 = L.divIcon({
+  "html": "\u003cdiv style=\"\n                font-family: Georgia, serif;\n                font-size: 12px;\n                color: #BC6C25;\n                text-shadow: 0 0 6px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.7);\n                white-space: nowrap;\n                text-align: center;\n                font-weight: bold;\n                letter-spacing: 0.5px;\n                pointer-events: none;\n                transform: translate(-50%, -50%);\n            \"\u003eVine City / English Avenue\u003c/div\u003e",
+  "iconSize": [200, 30],
+  "iconAnchor": [100, 15],
+  "className": "empty",
+});
+        
+    
+                marker_7a9439fbeba4fb5c79e0c0d42a16a665.setIcon(div_icon_299a5e2160eab9523621afbbe1293274);
+            
+    
+            var polygon_fb65a3fb0e0ad320f925f036f554d059 = L.polygon(
+                [[33.77, -84.39], [33.77, -84.378], [33.767, -84.375], [33.761, -84.375], [33.758, -84.378], [33.758, -84.388], [33.761, -84.391], [33.767, -84.391], [33.77, -84.39]],
+                {"bubblingMouseEvents": true, "color": "#9B2226", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#9B2226", "fillOpacity": 0.35, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(feature_group_12d33d8b496683fc87b90a4cf3efcb77);
+        
+    
+        var popup_dd1e38395842e1515b38bd1319bb7efa = L.popup({
+  "maxWidth": 420,
+});
+
+        
+            
+                var html_cf7d577da27c7e099354d894745ee35f = $(`<div id="html_cf7d577da27c7e099354d894745ee35f" style="width: 100.0%; height: 100.0%;">     <div style="         background: #1a1a2e;         color: #e0e0e0;         padding: 20px;         border-radius: 8px;         font-family: Georgia, 'Times New Roman', serif;         max-width: 380px;         line-height: 1.6;         border-left: 4px solid #9B2226;     ">         <h3 style="             color: #9B2226;             margin: 0 0 4px 0;             font-size: 20px;             letter-spacing: 0.5px;         ">Buttermilk Bottom</h3>         <div style="             color: #888;             font-size: 12px;             font-family: 'Courier New', monospace;             margin-bottom: 14px;             text-transform: uppercase;             letter-spacing: 1px;         ">Post-Civil War–1960s</div>          <div style="margin-bottom: 14px;">             <div style="                 color: #81B29A;                 font-size: 11px;                 font-family: 'Courier New', monospace;                 text-transform: uppercase;                 letter-spacing: 1.5px;                 margin-bottom: 6px;             ">BEFORE</div>             <p style="margin: 0; font-size: 13px; color: #ccc;">A dense Black neighborhood northeast of downtown. A community of working families, churches, and small businesses. One of the oldest Black settlements in Atlanta.</p>         </div>          <div style="margin-bottom: 14px;">             <div style="                 color: #d32f2f;                 font-size: 11px;                 font-family: 'Courier New', monospace;                 text-transform: uppercase;                 letter-spacing: 1.5px;                 margin-bottom: 6px;             ">AFTER</div>             <p style="margin: 0; font-size: 13px; color: #ccc;">Entirely demolished under “urban renewal.” Replaced by the Atlanta Civic Center. The neighborhood was erased from the map completely.</p>         </div>          <div style="             background: #0d1117;             padding: 10px 14px;             border-radius: 4px;             margin-top: 10px;         ">             <span style="                 color: #9B2226;                 font-family: 'Courier New', monospace;                 font-size: 11px;                 text-transform: uppercase;                 letter-spacing: 1px;             ">DISPLACED:</span>             <span style="color: #e0e0e0; font-size: 14px; margin-left: 8px;">Entire community displaced</span>         </div>     </div>     </div>`)[0];
+                popup_dd1e38395842e1515b38bd1319bb7efa.setContent(html_cf7d577da27c7e099354d894745ee35f);
+            
+        
+
+        polygon_fb65a3fb0e0ad320f925f036f554d059.bindPopup(popup_dd1e38395842e1515b38bd1319bb7efa)
+        ;
+
+        
+    
+    
+            polygon_fb65a3fb0e0ad320f925f036f554d059.bindTooltip(
+                `<div>
+                     <span style="font-family: Georgia; font-size: 14px; color: #9B2226;">Buttermilk Bottom</span><br><span style="font-family: monospace; font-size: 11px; color: #888;">Post-Civil War–1960s</span>
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_31527d10e63dce09dcd0bd0f36fe58b6 = L.marker(
+                [33.764, -84.383],
+                {
+}
+            ).addTo(feature_group_12d33d8b496683fc87b90a4cf3efcb77);
+        
+    
+            var div_icon_8989f9f3ed2d0673b5ce7afaf3ba77db = L.divIcon({
+  "html": "\u003cdiv style=\"\n                font-family: Georgia, serif;\n                font-size: 12px;\n                color: #9B2226;\n                text-shadow: 0 0 6px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.7);\n                white-space: nowrap;\n                text-align: center;\n                font-weight: bold;\n                letter-spacing: 0.5px;\n                pointer-events: none;\n                transform: translate(-50%, -50%);\n            \"\u003eButtermilk Bottom\u003c/div\u003e",
+  "iconSize": [200, 30],
+  "iconAnchor": [100, 15],
+  "className": "empty",
+});
+        
+    
+                marker_31527d10e63dce09dcd0bd0f36fe58b6.setIcon(div_icon_8989f9f3ed2d0673b5ce7afaf3ba77db);
+            
+    
+            var polygon_e8d2ae3f9cd8aeff6b5e611eedfd837e = L.polygon(
+                [[33.738, -84.392], [33.738, -84.38], [33.735, -84.376], [33.729, -84.376], [33.726, -84.38], [33.726, -84.39], [33.729, -84.393], [33.735, -84.393], [33.738, -84.392]],
+                {"bubblingMouseEvents": true, "color": "#606C38", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#606C38", "fillOpacity": 0.35, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(feature_group_12d33d8b496683fc87b90a4cf3efcb77);
+        
+    
+        var popup_a2864d31758792536f9314c2b942aac5 = L.popup({
+  "maxWidth": 420,
+});
+
+        
+            
+                var html_62be0004bb6f4efd66d85dee526ed768 = $(`<div id="html_62be0004bb6f4efd66d85dee526ed768" style="width: 100.0%; height: 100.0%;">     <div style="         background: #1a1a2e;         color: #e0e0e0;         padding: 20px;         border-radius: 8px;         font-family: Georgia, 'Times New Roman', serif;         max-width: 380px;         line-height: 1.6;         border-left: 4px solid #606C38;     ">         <h3 style="             color: #606C38;             margin: 0 0 4px 0;             font-size: 20px;             letter-spacing: 0.5px;         ">Peoplestown</h3>         <div style="             color: #888;             font-size: 12px;             font-family: 'Courier New', monospace;             margin-bottom: 14px;             text-transform: uppercase;             letter-spacing: 1px;         ">Post-Reconstruction</div>          <div style="margin-bottom: 14px;">             <div style="                 color: #81B29A;                 font-size: 11px;                 font-family: 'Courier New', monospace;                 text-transform: uppercase;                 letter-spacing: 1.5px;                 margin-bottom: 6px;             ">BEFORE</div>             <p style="margin: 0; font-size: 13px; color: #ccc;">A historically Black neighborhood south of downtown with strong community bonds. Working-class families with deep roots in the area.</p>         </div>          <div style="margin-bottom: 14px;">             <div style="                 color: #d32f2f;                 font-size: 11px;                 font-family: 'Courier New', monospace;                 text-transform: uppercase;                 letter-spacing: 1.5px;                 margin-bottom: 6px;             ">AFTER</div>             <p style="margin: 0; font-size: 13px; color: #ccc;">Hemmed in by I-20 to the north and urban renewal clearance. Lost connectivity to surrounding neighborhoods and downtown.</p>         </div>          <div style="             background: #0d1117;             padding: 10px 14px;             border-radius: 4px;             margin-top: 10px;         ">             <span style="                 color: #9B2226;                 font-family: 'Courier New', monospace;                 font-size: 11px;                 text-transform: uppercase;                 letter-spacing: 1px;             ">DISPLACED:</span>             <span style="color: #e0e0e0; font-size: 14px; margin-left: 8px;">Hundreds of families</span>         </div>     </div>     </div>`)[0];
+                popup_a2864d31758792536f9314c2b942aac5.setContent(html_62be0004bb6f4efd66d85dee526ed768);
+            
+        
+
+        polygon_e8d2ae3f9cd8aeff6b5e611eedfd837e.bindPopup(popup_a2864d31758792536f9314c2b942aac5)
+        ;
+
+        
+    
+    
+            polygon_e8d2ae3f9cd8aeff6b5e611eedfd837e.bindTooltip(
+                `<div>
+                     <span style="font-family: Georgia; font-size: 14px; color: #606C38;">Peoplestown</span><br><span style="font-family: monospace; font-size: 11px; color: #888;">Post-Reconstruction</span>
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_2283e330b8ffd8799171b1ee694ad5df = L.marker(
+                [33.733, -84.385],
+                {
+}
+            ).addTo(feature_group_12d33d8b496683fc87b90a4cf3efcb77);
+        
+    
+            var div_icon_2552c8bdc338c174a96a8c70561a7579 = L.divIcon({
+  "html": "\u003cdiv style=\"\n                font-family: Georgia, serif;\n                font-size: 12px;\n                color: #606C38;\n                text-shadow: 0 0 6px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.7);\n                white-space: nowrap;\n                text-align: center;\n                font-weight: bold;\n                letter-spacing: 0.5px;\n                pointer-events: none;\n                transform: translate(-50%, -50%);\n            \"\u003ePeoplestown\u003c/div\u003e",
+  "iconSize": [200, 30],
+  "iconAnchor": [100, 15],
+  "className": "empty",
+});
+        
+    
+                marker_2283e330b8ffd8799171b1ee694ad5df.setIcon(div_icon_2552c8bdc338c174a96a8c70561a7579);
+            
+    
+            var marker_2de42d152db9650c3611c578bc852827 = L.marker(
+                [33.7548, -84.3716],
+                {
+}
+            ).addTo(feature_group_12d33d8b496683fc87b90a4cf3efcb77);
+        
+    
+            var icon_114b26917fba3337edf7bfc8464ae0a5 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "beige",
+  "iconColor": "#1a1a2e",
+  "icon": "fa-church",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_afcf3b10424099ae173f7370dc58a07a = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_0dbda32308ffbcf9a04c73370be5df90 = $(`<div id="html_0dbda32308ffbcf9a04c73370be5df90" style="width: 100.0%; height: 100.0%;">     <div style="         background: #1a1a2e;         color: #e0e0e0;         padding: 16px;         border-radius: 8px;         font-family: Georgia, 'Times New Roman', serif;         max-width: 300px;         line-height: 1.5;         border-left: 4px solid #F2CC8F;     ">         <h4 style="color: #F2CC8F; margin: 0 0 8px 0; font-size: 16px;">Ebenezer Baptist Church</h4>         <p style="margin: 0; font-size: 13px; color: #ccc;">Spiritual home of the Civil Rights Movement. Co-pastored by Martin Luther King Sr. and Jr.</p>     </div>     </div>`)[0];
+                popup_afcf3b10424099ae173f7370dc58a07a.setContent(html_0dbda32308ffbcf9a04c73370be5df90);
+            
+        
+
+        marker_2de42d152db9650c3611c578bc852827.bindPopup(popup_afcf3b10424099ae173f7370dc58a07a)
+        ;
+
+        
+    
+    
+            marker_2de42d152db9650c3611c578bc852827.bindTooltip(
+                `<div>
+                     Ebenezer Baptist Church
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_2de42d152db9650c3611c578bc852827.setIcon(icon_114b26917fba3337edf7bfc8464ae0a5);
+            
+    
+            var marker_9180bd9dd683024de04065730a7d445a = L.marker(
+                [33.755, -84.372],
+                {
+}
+            ).addTo(feature_group_12d33d8b496683fc87b90a4cf3efcb77);
+        
+    
+            var icon_637a9a33a9ff67ba63aae1ee044c1a6c = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "beige",
+  "iconColor": "#1a1a2e",
+  "icon": "fa-home",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_c3b0a14f51d439580ae3099cb53f0464 = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_89cd8d8767d232ed23e84250ddd178be = $(`<div id="html_89cd8d8767d232ed23e84250ddd178be" style="width: 100.0%; height: 100.0%;">     <div style="         background: #1a1a2e;         color: #e0e0e0;         padding: 16px;         border-radius: 8px;         font-family: Georgia, 'Times New Roman', serif;         max-width: 300px;         line-height: 1.5;         border-left: 4px solid #F2CC8F;     ">         <h4 style="color: #F2CC8F; margin: 0 0 8px 0; font-size: 16px;">MLK Birth Home</h4>         <p style="margin: 0; font-size: 13px; color: #ccc;">Birthplace of Dr. Martin Luther King Jr., January 15, 1929.</p>     </div>     </div>`)[0];
+                popup_c3b0a14f51d439580ae3099cb53f0464.setContent(html_89cd8d8767d232ed23e84250ddd178be);
+            
+        
+
+        marker_9180bd9dd683024de04065730a7d445a.bindPopup(popup_c3b0a14f51d439580ae3099cb53f0464)
+        ;
+
+        
+    
+    
+            marker_9180bd9dd683024de04065730a7d445a.bindTooltip(
+                `<div>
+                     MLK Birth Home
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_9180bd9dd683024de04065730a7d445a.setIcon(icon_637a9a33a9ff67ba63aae1ee044c1a6c);
+            
+    
+            var marker_f9d8f40d142a800b22d85653135be9af = L.marker(
+                [33.7545, -84.379],
+                {
+}
+            ).addTo(feature_group_12d33d8b496683fc87b90a4cf3efcb77);
+        
+    
+            var icon_8b69bdf12eda485b4b5b4fb1ece160c1 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "beige",
+  "iconColor": "#1a1a2e",
+  "icon": "fa-building",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_2db59fc5b29b7653f29141f97d378383 = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_1de3447953794c53b1760f4517e50e05 = $(`<div id="html_1de3447953794c53b1760f4517e50e05" style="width: 100.0%; height: 100.0%;">     <div style="         background: #1a1a2e;         color: #e0e0e0;         padding: 16px;         border-radius: 8px;         font-family: Georgia, 'Times New Roman', serif;         max-width: 300px;         line-height: 1.5;         border-left: 4px solid #F2CC8F;     ">         <h4 style="color: #F2CC8F; margin: 0 0 8px 0; font-size: 16px;">Atlanta Life Insurance Co.</h4>         <p style="margin: 0; font-size: 13px; color: #ccc;">Originally targeted for demolition by highway planners. Community protest moved the route, but Auburn Ave was still severed.</p>     </div>     </div>`)[0];
+                popup_2db59fc5b29b7653f29141f97d378383.setContent(html_1de3447953794c53b1760f4517e50e05);
+            
+        
+
+        marker_f9d8f40d142a800b22d85653135be9af.bindPopup(popup_2db59fc5b29b7653f29141f97d378383)
+        ;
+
+        
+    
+    
+            marker_f9d8f40d142a800b22d85653135be9af.bindTooltip(
+                `<div>
+                     Atlanta Life Insurance Co.
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_f9d8f40d142a800b22d85653135be9af.setIcon(icon_8b69bdf12eda485b4b5b4fb1ece160c1);
+            
+    
+            var marker_f136c36174794282210520521f642203 = L.marker(
+                [33.753, -84.413],
+                {
+}
+            ).addTo(feature_group_12d33d8b496683fc87b90a4cf3efcb77);
+        
+    
+            var icon_ceab7655b5347042e9b167780561f37f = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "beige",
+  "iconColor": "#1a1a2e",
+  "icon": "fa-university",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_9471859df5f66afd45596bbfcaba80b3 = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_e810baa459e8991748e62c7d18355a53 = $(`<div id="html_e810baa459e8991748e62c7d18355a53" style="width: 100.0%; height: 100.0%;">     <div style="         background: #1a1a2e;         color: #e0e0e0;         padding: 16px;         border-radius: 8px;         font-family: Georgia, 'Times New Roman', serif;         max-width: 300px;         line-height: 1.5;         border-left: 4px solid #F2CC8F;     ">         <h4 style="color: #F2CC8F; margin: 0 0 8px 0; font-size: 16px;">Atlanta University Center</h4>         <p style="margin: 0; font-size: 13px; color: #ccc;">Consortium of HBCUs including Morehouse, Spelman, and Clark Atlanta. An anchor of Black intellectual life.</p>     </div>     </div>`)[0];
+                popup_9471859df5f66afd45596bbfcaba80b3.setContent(html_e810baa459e8991748e62c7d18355a53);
+            
+        
+
+        marker_f136c36174794282210520521f642203.bindPopup(popup_9471859df5f66afd45596bbfcaba80b3)
+        ;
+
+        
+    
+    
+            marker_f136c36174794282210520521f642203.bindTooltip(
+                `<div>
+                     Atlanta University Center
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_f136c36174794282210520521f642203.setIcon(icon_ceab7655b5347042e9b167780561f37f);
+            
+    
+            var marker_4df4621d3392761f7c3335bafda768f6 = L.marker(
+                [33.749, -84.388],
+                {
+}
+            ).addTo(feature_group_12d33d8b496683fc87b90a4cf3efcb77);
+        
+    
+            var icon_bdf34d245cd354b472b19dea3aa7645c = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "beige",
+  "iconColor": "#1a1a2e",
+  "icon": "fa-landmark",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_24d56d91e221b642f7ec233a030ad419 = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_6683f72fe2ae1b0bf8a31186edc22ad3 = $(`<div id="html_6683f72fe2ae1b0bf8a31186edc22ad3" style="width: 100.0%; height: 100.0%;">     <div style="         background: #1a1a2e;         color: #e0e0e0;         padding: 16px;         border-radius: 8px;         font-family: Georgia, 'Times New Roman', serif;         max-width: 300px;         line-height: 1.5;         border-left: 4px solid #F2CC8F;     ">         <h4 style="color: #F2CC8F; margin: 0 0 8px 0; font-size: 16px;">Georgia State Capitol</h4>         <p style="margin: 0; font-size: 13px; color: #ccc;">State Capitol building. Highway routes were planned to protect white neighborhoods and government properties.</p>     </div>     </div>`)[0];
+                popup_24d56d91e221b642f7ec233a030ad419.setContent(html_6683f72fe2ae1b0bf8a31186edc22ad3);
+            
+        
+
+        marker_4df4621d3392761f7c3335bafda768f6.bindPopup(popup_24d56d91e221b642f7ec233a030ad419)
+        ;
+
+        
+    
+    
+            marker_4df4621d3392761f7c3335bafda768f6.bindTooltip(
+                `<div>
+                     Georgia State Capitol
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_4df4621d3392761f7c3335bafda768f6.setIcon(icon_bdf34d245cd354b472b19dea3aa7645c);
+            
+    
+            var marker_67e53dc676bad9f7ba672e16fc95b6d7 = L.marker(
+                [33.7483, -84.3713],
+                {
+}
+            ).addTo(feature_group_12d33d8b496683fc87b90a4cf3efcb77);
+        
+    
+            var icon_cac02e0d2de3e8bb1cde58619d50dfb5 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "beige",
+  "iconColor": "#1a1a2e",
+  "icon": "fa-monument",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_b248821034bb3f2031d14df36b395ea9 = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_29a035545448d812b433f944fdb2e3df = $(`<div id="html_29a035545448d812b433f944fdb2e3df" style="width: 100.0%; height: 100.0%;">     <div style="         background: #1a1a2e;         color: #e0e0e0;         padding: 16px;         border-radius: 8px;         font-family: Georgia, 'Times New Roman', serif;         max-width: 300px;         line-height: 1.5;         border-left: 4px solid #F2CC8F;     ">         <h4 style="color: #F2CC8F; margin: 0 0 8px 0; font-size: 16px;">Oakland Cemetery</h4>         <p style="margin: 0; font-size: 13px; color: #ccc;">Historic cemetery est. 1850. Segregated burial grounds reflect the city's racial divisions.</p>     </div>     </div>`)[0];
+                popup_b248821034bb3f2031d14df36b395ea9.setContent(html_29a035545448d812b433f944fdb2e3df);
+            
+        
+
+        marker_67e53dc676bad9f7ba672e16fc95b6d7.bindPopup(popup_b248821034bb3f2031d14df36b395ea9)
+        ;
+
+        
+    
+    
+            marker_67e53dc676bad9f7ba672e16fc95b6d7.bindTooltip(
+                `<div>
+                     Oakland Cemetery
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_67e53dc676bad9f7ba672e16fc95b6d7.setIcon(icon_cac02e0d2de3e8bb1cde58619d50dfb5);
+            
+    
+            feature_group_12d33d8b496683fc87b90a4cf3efcb77.addTo(map_dfda8f63f4ebb46828997ad6554c0746);
+        
+    
+            var feature_group_38299e0446d0b44c1e03c5a0590b7757 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var polygon_88b75e3d6f2409f9d3718118978a4bf3 = L.polygon(
+                [[33.74845145168923, -84.43950970966215], [33.746451451689225, -84.42950970966216], [33.74445145168922, -84.41950970966215], [33.743451451689225, -84.41450970966216], [33.74245145168923, -84.40950970966216], [33.741499999999995, -84.40475245121601], [33.741499999999995, -84.39524754878398], [33.74245145168923, -84.39049029033785], [33.743451451689225, -84.38549029033786], [33.74445145168922, -84.38049029033783], [33.74545145168923, -84.37549029033785], [33.746451451689225, -84.37049029033786], [33.74745145168922, -84.36549029033783], [33.74845145168923, -84.36049029033785], [33.749451451689225, -84.35549029033785], [33.75045145168922, -84.35049029033783], [33.750487592975524, -84.35024875929754], [33.75148759297553, -84.34024875929755], [33.75248759297553, -84.33024875929755], [33.75249999721039, -84.33000373470378], [33.752488325105496, -84.32975867414277], [33.75245268906957, -84.32951593768168], [33.752393432297126, -84.32927786300533], [33.75231112546328, -84.329046742903], [33.75220656122783, -84.32882480318762], [33.752080746601536, -84.32861418125997], [33.751934893248006, -84.32841690552435], [33.75177040581478, -84.32823487585395], [33.75158886840576, -84.32806984529398], [33.75139202932543, -84.32792340317896], [33.75118178424173, -84.32779695982651], [33.750960157929754, -84.32769173295524], [33.75072928477204, -84.32760873595743], [33.75049138820331, -84.32754876813955], [33.75024875929755, -84.32751240702447], [33.750003734703775, -84.3275000027896], [33.74975867414276, -84.32751167489451], [33.74951593768167, -84.32754731093043], [33.74927786300533, -84.32760656770287], [33.749046742903005, -84.32768887453672], [33.748824803187624, -84.32779343877216], [33.748614181259974, -84.32791925339846], [33.74841690552436, -84.32806510675199], [33.748234875853946, -84.32822959418522], [33.74806984529398, -84.32841113159424], [33.74792340317896, -84.32860797067457], [33.747796959826516, -84.32881821575826], [33.74769173295524, -84.32903984207024], [33.747608735957435, -84.32927071522795], [33.74754876813956, -84.3295086117967], [33.74751240702447, -84.32975124070245], [33.746512407024476, -84.33975124070245], [33.74552457194623, -84.34962959148488], [33.744548548310775, -84.35450970966217], [33.74354854831078, -84.35950970966215], [33.74254854831077, -84.36450970966214], [33.741548548310774, -84.36950970966217], [33.74054854831078, -84.37450970966215], [33.73954854831077, -84.37950970966214], [33.738548548310774, -84.38450970966217], [33.73754854831078, -84.38950970966215], [33.73654854831077, -84.39450970966215], [33.736512166683326, -84.39475365595507], [33.7365, -84.395], [33.7365, -84.405], [33.736512166683326, -84.40524634404493], [33.73654854831077, -84.40549029033785], [33.73754854831078, -84.41049029033785], [33.738548548310774, -84.41549029033784], [33.73954854831077, -84.42049029033785], [33.741548548310774, -84.43049029033786], [33.74354854831078, -84.44049029033785], [33.74554854831077, -84.45049029033785], [33.74560840957755, -84.45072821374009], [33.745691303167476, -84.45095912404594], [33.74579643076996, -84.45118079746292], [33.74592277994872, -84.45139109915483], [33.7460691338921, -84.45158800380145], [33.74623408313162, -84.45176961510334], [33.74641603911593, -84.45193418404443], [33.74661324950943, -84.45208012573585], [33.74682381506824, -84.4522060346793], [33.7470457079309, -84.45231069830287], [33.74727679114786, -84.45239310863862], [33.747514839261406, -84.45245247202996], [33.74775755973809, -84.45248821677501], [33.74800261504702, -84.4524999986323], [33.748247645171624, -84.45248770413615], [33.74849029033784, -84.45245145168923], [33.74872821374009, -84.45239159042245], [33.74895912404594, -84.45230869683253], [33.74918079746291, -84.45220356923004], [33.74939109915483, -84.45207722005128], [33.749588003801435, -84.4519308661079], [33.74976961510334, -84.45176591686838], [33.749934184044434, -84.45158396088407], [33.75008012573584, -84.45138675049057], [33.7502060346793, -84.45117618493177], [33.75031069830286, -84.4509542920691], [33.750393108638605, -84.45072320885214], [33.750452472029956, -84.4504851607386], [33.750488216775, -84.45024244026192], [33.7504999986323, -84.44999738495298], [33.75048770413614, -84.44975235482838], [33.75045145168922, -84.44950970966215], [33.74845145168923, -84.43950970966215]],
+                {"bubblingMouseEvents": true, "color": "#d32f2f", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#d32f2f", "fillOpacity": 0.15, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 0}
+            ).addTo(feature_group_38299e0446d0b44c1e03c5a0590b7757);
+        
+    
+            polygon_88b75e3d6f2409f9d3718118978a4bf3.bindTooltip(
+                `<div>
+                     I-20 Destruction Zone (~500m wide footprint)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_e78f1d07368d8f9a288f2c4ec23ad45f = L.polyline(
+                [[33.748, -84.45], [33.746, -84.44], [33.744, -84.43], [33.742, -84.42], [33.741, -84.415], [33.74, -84.41], [33.739, -84.405], [33.739, -84.4], [33.739, -84.395], [33.74, -84.39], [33.741, -84.385], [33.742, -84.38], [33.743, -84.375], [33.744, -84.37], [33.745, -84.365], [33.746, -84.36], [33.747, -84.355], [33.748, -84.35], [33.749, -84.34], [33.75, -84.33]],
+                {"bubblingMouseEvents": true, "color": "#d32f2f", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#d32f2f", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.25, "smoothFactor": 1.0, "stroke": true, "weight": 12}
+            ).addTo(feature_group_38299e0446d0b44c1e03c5a0590b7757);
+        
+    
+            var poly_line_25526ee613cb7a39bea18ba76852ed00 = L.polyline(
+                [[33.748, -84.45], [33.746, -84.44], [33.744, -84.43], [33.742, -84.42], [33.741, -84.415], [33.74, -84.41], [33.739, -84.405], [33.739, -84.4], [33.739, -84.395], [33.74, -84.39], [33.741, -84.385], [33.742, -84.38], [33.743, -84.375], [33.744, -84.37], [33.745, -84.365], [33.746, -84.36], [33.747, -84.355], [33.748, -84.35], [33.749, -84.34], [33.75, -84.33]],
+                {"bubblingMouseEvents": true, "color": "#d32f2f", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#d32f2f", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.9, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(feature_group_38299e0446d0b44c1e03c5a0590b7757);
+        
+    
+            poly_line_25526ee613cb7a39bea18ba76852ed00.bindTooltip(
+                `<div>
+                     I-20 — Cut through the heart of Black Atlanta
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_3a09ef3da54f1dffc460f17495fb2797 = L.polyline(
+                [[33.748, -84.45], [33.746, -84.44], [33.744, -84.43], [33.742, -84.42], [33.741, -84.415], [33.74, -84.41], [33.739, -84.405], [33.739, -84.4], [33.739, -84.395], [33.74, -84.39], [33.741, -84.385], [33.742, -84.38], [33.743, -84.375], [33.744, -84.37], [33.745, -84.365], [33.746, -84.36], [33.747, -84.355], [33.748, -84.35], [33.749, -84.34], [33.75, -84.33]],
+                {"bubblingMouseEvents": true, "color": "#ff6659", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#ff6659", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.7, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(feature_group_38299e0446d0b44c1e03c5a0590b7757);
+        
+    
+            var polygon_d5c73c0a2870906c8c4b6689793203d9 = L.polygon(
+                [[33.78539223227027, -84.39203883864862], [33.78039223227028, -84.39103883864863], [33.775572290587135, -84.39007485031199], [33.77074278135271, -84.38814304661823], [33.77056989367984, -84.3880829133578], [33.77039223227028, -84.38803883864863], [33.765514329760066, -84.38706325814658], [33.76263245553203, -84.38610263340391], [33.762485071250076, -84.38605971499972], [33.75855958752763, -84.3850783440691], [33.75563245553204, -84.3841026334039], [33.75263245553203, -84.38310263340391], [33.74963245553204, -84.3821026334039], [33.74942571854917, -84.38204583426575], [33.74921408938731, -84.38201149158054], [33.749, -84.382], [33.746, -84.382], [33.745785910612696, -84.38201149158054], [33.745574281450835, -84.38204583426575], [33.74536754446797, -84.3821026334039], [33.74236754446797, -84.38310263340391], [33.739367544467974, -84.3841026334039], [33.73920186205362, -84.3841661581806], [33.73904246219402, -84.38424411807055], [33.73889059960755, -84.38433589941133], [33.73589059960755, -84.38633589941134], [33.72989059960755, -84.39033589941131], [33.72689059960755, -84.39233589941134], [33.724063869022025, -84.39422038646833], [33.71925721864729, -84.39614304661822], [33.71425721864729, -84.39814304661823], [33.709257218647295, -84.40014304661823], [33.70907878208232, -84.4002247936604], [33.708909217349486, -84.40032363691004], [33.70875015744986, -84.40043862445265], [33.70860313421723, -84.4005686488953], [33.708469563565686, -84.40071245803155], [33.70835073185362, -84.4008686669008], [33.708247783495395, -84.40103577112625], [33.708161709939965, -84.40121216140284], [33.70809334012272, -84.4013961389958], [33.70804333248239, -84.40158593210035], [33.708012168619874, -84.40177971290511], [33.708000148660204, -84.40197561519501], [33.70800738836217, -84.40217175232394], [33.70803381800348, -84.40236623538408], [33.708079183052234, -84.40255719139726], [33.70814304661823, -84.40274278135271], [33.7082247936604, -84.40292121791768], [33.70832363691005, -84.40309078265051], [33.708438624452654, -84.40324984255014], [33.70856864889531, -84.40339686578278], [33.708712458031556, -84.40353043643432], [33.7088686669008, -84.40364926814638], [33.709035771126246, -84.4037522165046], [33.70921216140284, -84.40383829006004], [33.70939613899581, -84.40390665987728], [33.709585932100346, -84.40395666751762], [33.70977971290511, -84.40398783138014], [33.70997561519502, -84.4039998513398], [33.71017175232393, -84.40399261163783], [33.71036623538407, -84.40396618199652], [33.710557191397264, -84.40392081694776], [33.71074278135271, -84.40385695338178], [33.71574278135271, -84.40185695338178], [33.72074278135271, -84.39985695338177], [33.72574278135271, -84.39785695338178], [33.72593109739245, -84.39777004453215], [33.72610940039245, -84.39766410058868], [33.72910940039245, -84.39566410058869], [33.73210940039245, -84.39366410058867], [33.73810940039245, -84.38966410058869], [33.740886547230595, -84.38781266936324], [33.74363245553203, -84.3868973665961], [33.74632455532034, -84.386], [33.74867544467966, -84.386], [33.75136754446797, -84.3868973665961], [33.754367544467975, -84.38789736659609], [33.75736754446797, -84.3888973665961], [33.75751492874993, -84.38894028500029], [33.7614404124724, -84.38992165593092], [33.76436754446797, -84.39089736659609], [33.76460776772972, -84.39096116135137], [33.76942770941287, -84.391925149688], [33.77425721864729, -84.39385695338177], [33.77443010632016, -84.39391708664219], [33.77460776772972, -84.39396116135137], [33.77960776772972, -84.39496116135138], [33.78460776772972, -84.39596116135138], [33.78960776772973, -84.39696116135138], [33.7898018838627, -84.39699016330891], [33.78999790796238, -84.39699999890584], [33.79019395220953, -84.39699057342], [33.79038812859087, -84.39696197762396], [33.79057856708171, -84.39691448691089], [33.79076343365528, -84.39684855864229], [33.79094094794541, -84.39676482774344], [33.79110940039245, -84.39666410058867], [33.79126716870726, -84.39654734723554], [33.7914127334947, -84.39641569208267], [33.79154469288632, -84.39627040304114], [33.791661776041025, -84.39611287932387], [33.79176285538403, -84.39594463797033], [33.79184695746602, -84.39576729923675], [33.79191327233796, -84.39558257099206], [33.79196116135138, -84.39539223227027], [33.79199016330891, -84.3951981161373], [33.791999998905844, -84.39500209203761], [33.79199057342, -84.39480604779047], [33.79196197762396, -84.39461187140913], [33.79191448691088, -84.39442143291828], [33.791848558642286, -84.39423656634472], [33.79176482774344, -84.39405905205459], [33.791664100588676, -84.39389059960754], [33.79154734723554, -84.39373283129274], [33.79141569208267, -84.39358726650529], [33.791270403041146, -84.39345530711368], [33.79111287932386, -84.39333822395898], [33.79094463797033, -84.39323714461597], [33.79076729923675, -84.39315304253398], [33.79058257099207, -84.39308672766204], [33.79039223227027, -84.39303883864861], [33.78539223227027, -84.39203883864862]],
+                {"bubblingMouseEvents": true, "color": "#e65100", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#e65100", "fillOpacity": 0.12, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 0}
+            ).addTo(feature_group_38299e0446d0b44c1e03c5a0590b7757);
+        
+    
+            polygon_d5c73c0a2870906c8c4b6689793203d9.bindTooltip(
+                `<div>
+                     I-75/85 Downtown Connector Destruction Zone
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_17683ebe42a5fce09a15b3027d4898cd = L.polyline(
+                [[33.79, -84.395], [33.785, -84.394], [33.78, -84.393], [33.775, -84.392], [33.77, -84.39], [33.765, -84.389], [33.762, -84.388], [33.758, -84.387], [33.755, -84.386], [33.752, -84.385], [33.749, -84.384], [33.746, -84.384], [33.743, -84.385], [33.74, -84.386], [33.737, -84.388], [33.734, -84.39], [33.731, -84.392], [33.728, -84.394], [33.725, -84.396], [33.72, -84.398], [33.715, -84.4], [33.71, -84.402]],
+                {"bubblingMouseEvents": true, "color": "#e65100", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#e65100", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.2, "smoothFactor": 1.0, "stroke": true, "weight": 12}
+            ).addTo(feature_group_38299e0446d0b44c1e03c5a0590b7757);
+        
+    
+            var poly_line_d1eef1cd330cb193c5ff851b3da1f967 = L.polyline(
+                [[33.79, -84.395], [33.785, -84.394], [33.78, -84.393], [33.775, -84.392], [33.77, -84.39], [33.765, -84.389], [33.762, -84.388], [33.758, -84.387], [33.755, -84.386], [33.752, -84.385], [33.749, -84.384], [33.746, -84.384], [33.743, -84.385], [33.74, -84.386], [33.737, -84.388], [33.734, -84.39], [33.731, -84.392], [33.728, -84.394], [33.725, -84.396], [33.72, -84.398], [33.715, -84.4], [33.71, -84.402]],
+                {"bubblingMouseEvents": true, "color": "#e65100", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#e65100", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.85, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(feature_group_38299e0446d0b44c1e03c5a0590b7757);
+        
+    
+            poly_line_d1eef1cd330cb193c5ff851b3da1f967.bindTooltip(
+                `<div>
+                     I-75/85 Downtown Connector — Severed Auburn Avenue from downtown
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_a5db8553a53701e6768a12412a97644a = L.polyline(
+                [[33.79, -84.395], [33.785, -84.394], [33.78, -84.393], [33.775, -84.392], [33.77, -84.39], [33.765, -84.389], [33.762, -84.388], [33.758, -84.387], [33.755, -84.386], [33.752, -84.385], [33.749, -84.384], [33.746, -84.384], [33.743, -84.385], [33.74, -84.386], [33.737, -84.388], [33.734, -84.39], [33.731, -84.392], [33.728, -84.394], [33.725, -84.396], [33.72, -84.398], [33.715, -84.4], [33.71, -84.402]],
+                {"bubblingMouseEvents": true, "color": "#ff9800", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#ff9800", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.6, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(feature_group_38299e0446d0b44c1e03c5a0590b7757);
+        
+    
+            var marker_53545858ad56ea162f3371fd0bb5ea1f = L.marker(
+                [33.745, -84.35],
+                {
+}
+            ).addTo(feature_group_38299e0446d0b44c1e03c5a0590b7757);
+        
+    
+            var div_icon_b7531987dacffcd9834a8720fba4bb2e = L.divIcon({
+  "html": "\u003cdiv style=\"\n                font-family: \u0027Courier New\u0027, monospace;\n                font-size: 13px;\n                font-weight: bold;\n                color: #ff6659;\n                text-shadow: 0 0 8px rgba(211,47,47,0.6), 0 0 16px rgba(0,0,0,0.9);\n                white-space: nowrap;\n                letter-spacing: 2px;\n                pointer-events: none;\n            \"\u003eI-20\u003c/div\u003e",
+  "iconSize": [120, 20],
+  "iconAnchor": [60, 10],
+  "className": "empty",
+});
+        
+    
+                marker_53545858ad56ea162f3371fd0bb5ea1f.setIcon(div_icon_b7531987dacffcd9834a8720fba4bb2e);
+            
+    
+            var marker_9d9799503e63452084cc06a733b3c825 = L.marker(
+                [33.78, -84.392],
+                {
+}
+            ).addTo(feature_group_38299e0446d0b44c1e03c5a0590b7757);
+        
+    
+            var div_icon_c00d60fae9fa5a1eb2b42f823945cf27 = L.divIcon({
+  "html": "\u003cdiv style=\"\n                font-family: \u0027Courier New\u0027, monospace;\n                font-size: 13px;\n                font-weight: bold;\n                color: #ff6659;\n                text-shadow: 0 0 8px rgba(211,47,47,0.6), 0 0 16px rgba(0,0,0,0.9);\n                white-space: nowrap;\n                letter-spacing: 2px;\n                pointer-events: none;\n            \"\u003eI-75 / I-85\u003c/div\u003e",
+  "iconSize": [120, 20],
+  "iconAnchor": [60, 10],
+  "className": "empty",
+});
+        
+    
+                marker_9d9799503e63452084cc06a733b3c825.setIcon(div_icon_c00d60fae9fa5a1eb2b42f823945cf27);
+            
+    
+            var feature_group_879f563b7619c1898f26ece6f93436b8 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var polygon_ed8a2c464d98b58fa7a95765b18fa850 = L.polygon(
+                [[33.742, -84.392], [33.742, -84.38], [33.74, -84.376], [33.735, -84.374], [33.732, -84.378], [33.732, -84.388], [33.735, -84.392], [33.742, -84.392]],
+                {"bubblingMouseEvents": true, "color": "#E07A5F", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#E07A5F", "fillOpacity": 0.25, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(feature_group_879f563b7619c1898f26ece6f93436b8);
+        
+    
+        var popup_c5c618ede83de6eb0e09b0e9091e5e9c = L.popup({
+  "maxWidth": 420,
+});
+
+        
+            
+                var html_fd43177e8cee5e428ca978fe05a6fb97 = $(`<div id="html_fd43177e8cee5e428ca978fe05a6fb97" style="width: 100.0%; height: 100.0%;">     <div style="         background: #1a1a2e;         color: #e0e0e0;         padding: 20px;         border-radius: 8px;         font-family: Georgia, 'Times New Roman', serif;         max-width: 380px;         line-height: 1.6;         border-left: 4px solid #E07A5F;     ">         <h3 style="             color: #E07A5F;             margin: 0 0 4px 0;             font-size: 20px;             letter-spacing: 0.5px;         ">Summerhill</h3>         <div style="             color: #888;             font-size: 12px;             font-family: 'Courier New', monospace;             margin-bottom: 14px;             text-transform: uppercase;             letter-spacing: 1px;         ">Founded during Reconstruction</div>          <div style="margin-bottom: 14px;">             <div style="                 color: #81B29A;                 font-size: 11px;                 font-family: 'Courier New', monospace;                 text-transform: uppercase;                 letter-spacing: 1.5px;                 margin-bottom: 6px;             ">BEFORE</div>             <p style="margin: 0; font-size: 13px; color: #ccc;">One of the first settlements of freed slaves after the Civil War. Home to Georgia's first public school for African Americans. A dense, walkable community connected to downtown by streetcar. Mixed-income with eastern and southern European immigrants.</p>         </div>          <div style="margin-bottom: 14px;">             <div style="                 color: #d32f2f;                 font-size: 11px;                 font-family: 'Courier New', monospace;                 text-transform: uppercase;                 letter-spacing: 1.5px;                 margin-bottom: 6px;             ">AFTER</div>             <p style="margin: 0; font-size: 13px; color: #ccc;">Bisected by I-20 and the I-75/85 interchange. Cut off from downtown businesses. Population cratered. Remained impoverished for decades until recent gentrification pressures.</p>         </div>          <div style="             background: #0d1117;             padding: 10px 14px;             border-radius: 4px;             margin-top: 10px;         ">             <span style="                 color: #9B2226;                 font-family: 'Courier New', monospace;                 font-size: 11px;                 text-transform: uppercase;                 letter-spacing: 1px;             ">DISPLACED:</span>             <span style="color: #e0e0e0; font-size: 14px; margin-left: 8px;">Thousands of residents</span>         </div>     </div>     </div>`)[0];
+                popup_c5c618ede83de6eb0e09b0e9091e5e9c.setContent(html_fd43177e8cee5e428ca978fe05a6fb97);
+            
+        
+
+        polygon_ed8a2c464d98b58fa7a95765b18fa850.bindPopup(popup_c5c618ede83de6eb0e09b0e9091e5e9c)
+        ;
+
+        
+    
+    
+            polygon_ed8a2c464d98b58fa7a95765b18fa850.bindTooltip(
+                `<div>
+                     <span style="font-family: Georgia; color: #E07A5F;">Summerhill</span>
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_76c542da840e6b6fb485d8f6ca5ce633 = L.marker(
+                [33.738, -84.383],
+                {
+}
+            ).addTo(feature_group_879f563b7619c1898f26ece6f93436b8);
+        
+    
+            var div_icon_b20f0018c9a91f427a0d998f32378dc4 = L.divIcon({
+  "html": "\u003cdiv style=\"\n                font-family: Georgia, serif;\n                font-size: 11px;\n                color: #E07A5F;\n                text-shadow: 0 0 6px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.8);\n                white-space: nowrap;\n                text-align: center;\n                font-weight: bold;\n                pointer-events: none;\n                transform: translate(-50%, -50%);\n            \"\u003eSummerhill\u003c/div\u003e",
+  "iconSize": [200, 30],
+  "iconAnchor": [100, 15],
+  "className": "empty",
+});
+        
+    
+                marker_76c542da840e6b6fb485d8f6ca5ce633.setIcon(div_icon_b20f0018c9a91f427a0d998f32378dc4);
+            
+    
+            var polygon_c3630187db33b4214fd13c85b0e21bc8 = L.polygon(
+                [[33.742, -84.41], [33.742, -84.396], [33.738, -84.393], [33.732, -84.393], [33.729, -84.398], [33.729, -84.41], [33.733, -84.413], [33.738, -84.412], [33.742, -84.41]],
+                {"bubblingMouseEvents": true, "color": "#81B29A", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#81B29A", "fillOpacity": 0.25, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(feature_group_879f563b7619c1898f26ece6f93436b8);
+        
+    
+        var popup_eb9003ac1129a6bd8e9d4efaa73ef853 = L.popup({
+  "maxWidth": 420,
+});
+
+        
+            
+                var html_ede7a14893b63bfa696151b007d1ea70 = $(`<div id="html_ede7a14893b63bfa696151b007d1ea70" style="width: 100.0%; height: 100.0%;">     <div style="         background: #1a1a2e;         color: #e0e0e0;         padding: 20px;         border-radius: 8px;         font-family: Georgia, 'Times New Roman', serif;         max-width: 380px;         line-height: 1.6;         border-left: 4px solid #81B29A;     ">         <h3 style="             color: #81B29A;             margin: 0 0 4px 0;             font-size: 20px;             letter-spacing: 0.5px;         ">Mechanicsville</h3>         <div style="             color: #888;             font-size: 12px;             font-family: 'Courier New', monospace;             margin-bottom: 14px;             text-transform: uppercase;             letter-spacing: 1px;         ">Established 1870s</div>          <div style="margin-bottom: 14px;">             <div style="                 color: #81B29A;                 font-size: 11px;                 font-family: 'Courier New', monospace;                 text-transform: uppercase;                 letter-spacing: 1.5px;                 margin-bottom: 6px;             ">BEFORE</div>             <p style="margin: 0; font-size: 13px; color: #ccc;">Named for railway workers in the area. Railroads were one of few industries employing African Americans. Diverse, vibrant, uniquely mixed-income neighborhood connected to downtown by dense streetcar network.</p>         </div>          <div style="margin-bottom: 14px;">             <div style="                 color: #d32f2f;                 font-size: 11px;                 font-family: 'Courier New', monospace;                 text-transform: uppercase;                 letter-spacing: 1.5px;                 margin-bottom: 6px;             ">AFTER</div>             <p style="margin: 0; font-size: 13px; color: #ccc;">The I-75/I-20 junction wiped out hundreds of homes and businesses. Isolated from Summerhill and downtown. The neighborhood became unrecognizable compared to its previous state.</p>         </div>          <div style="             background: #0d1117;             padding: 10px 14px;             border-radius: 4px;             margin-top: 10px;         ">             <span style="                 color: #9B2226;                 font-family: 'Courier New', monospace;                 font-size: 11px;                 text-transform: uppercase;                 letter-spacing: 1px;             ">DISPLACED:</span>             <span style="color: #e0e0e0; font-size: 14px; margin-left: 8px;">Hundreds of families</span>         </div>     </div>     </div>`)[0];
+                popup_eb9003ac1129a6bd8e9d4efaa73ef853.setContent(html_ede7a14893b63bfa696151b007d1ea70);
+            
+        
+
+        polygon_c3630187db33b4214fd13c85b0e21bc8.bindPopup(popup_eb9003ac1129a6bd8e9d4efaa73ef853)
+        ;
+
+        
+    
+    
+            polygon_c3630187db33b4214fd13c85b0e21bc8.bindTooltip(
+                `<div>
+                     <span style="font-family: Georgia; color: #81B29A;">Mechanicsville</span>
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_5dbd39e68a79744b189ed78b8ae9fec3 = L.marker(
+                [33.737, -84.401],
+                {
+}
+            ).addTo(feature_group_879f563b7619c1898f26ece6f93436b8);
+        
+    
+            var div_icon_43373e4c8f3e0cbd7b3474466fd5937b = L.divIcon({
+  "html": "\u003cdiv style=\"\n                font-family: Georgia, serif;\n                font-size: 11px;\n                color: #81B29A;\n                text-shadow: 0 0 6px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.8);\n                white-space: nowrap;\n                text-align: center;\n                font-weight: bold;\n                pointer-events: none;\n                transform: translate(-50%, -50%);\n            \"\u003eMechanicsville\u003c/div\u003e",
+  "iconSize": [200, 30],
+  "iconAnchor": [100, 15],
+  "className": "empty",
+});
+        
+    
+                marker_5dbd39e68a79744b189ed78b8ae9fec3.setIcon(div_icon_43373e4c8f3e0cbd7b3474466fd5937b);
+            
+    
+            var polygon_5ef02022e2b882f8f0967b719e1898da = L.polygon(
+                [[33.762, -84.388], [33.762, -84.37], [33.758, -84.365], [33.752, -84.365], [33.748, -84.37], [33.748, -84.385], [33.752, -84.39], [33.758, -84.39], [33.762, -84.388]],
+                {"bubblingMouseEvents": true, "color": "#F2CC8F", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#F2CC8F", "fillOpacity": 0.25, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(feature_group_879f563b7619c1898f26ece6f93436b8);
+        
+    
+        var popup_fbce9f6842e8153a52b873847310a8dc = L.popup({
+  "maxWidth": 420,
+});
+
+        
+            
+                var html_f1666a783a2534233468d4b3783171f2 = $(`<div id="html_f1666a783a2534233468d4b3783171f2" style="width: 100.0%; height: 100.0%;">     <div style="         background: #1a1a2e;         color: #e0e0e0;         padding: 20px;         border-radius: 8px;         font-family: Georgia, 'Times New Roman', serif;         max-width: 380px;         line-height: 1.6;         border-left: 4px solid #F2CC8F;     ">         <h3 style="             color: #F2CC8F;             margin: 0 0 4px 0;             font-size: 20px;             letter-spacing: 0.5px;         ">Sweet Auburn / Old Fourth Ward</h3>         <div style="             color: #888;             font-size: 12px;             font-family: 'Courier New', monospace;             margin-bottom: 14px;             text-transform: uppercase;             letter-spacing: 1px;         ">Late 1800s–1960s</div>          <div style="margin-bottom: 14px;">             <div style="                 color: #81B29A;                 font-size: 11px;                 font-family: 'Courier New', monospace;                 text-transform: uppercase;                 letter-spacing: 1.5px;                 margin-bottom: 6px;             ">BEFORE</div>             <p style="margin: 0; font-size: 13px; color: #ccc;">Called “The Richest Negro Street in America.” Home to Auburn Avenue — the commercial and cultural heart of Black Atlanta. Atlanta Life Insurance Company HQ. Ebenezer Baptist Church. Birthplace of Martin Luther King Jr. A thriving corridor of Black-owned businesses, churches, and institutions.</p>         </div>          <div style="margin-bottom: 14px;">             <div style="                 color: #d32f2f;                 font-size: 11px;                 font-family: 'Courier New', monospace;                 text-transform: uppercase;                 letter-spacing: 1.5px;                 margin-bottom: 6px;             ">AFTER</div>             <p style="margin: 0; font-size: 13px; color: #ccc;">I-85/Downtown Connector sliced through Auburn Avenue, creating a wall between the neighborhood and downtown. The highway was originally designed to destroy the Atlanta Life Insurance Company headquarters — community protest moved the route east, but it still severed the main street.</p>         </div>          <div style="             background: #0d1117;             padding: 10px 14px;             border-radius: 4px;             margin-top: 10px;         ">             <span style="                 color: #9B2226;                 font-family: 'Courier New', monospace;                 font-size: 11px;                 text-transform: uppercase;                 letter-spacing: 1px;             ">DISPLACED:</span>             <span style="color: #e0e0e0; font-size: 14px; margin-left: 8px;">Massive commercial and residential displacement</span>         </div>     </div>     </div>`)[0];
+                popup_fbce9f6842e8153a52b873847310a8dc.setContent(html_f1666a783a2534233468d4b3783171f2);
+            
+        
+
+        polygon_5ef02022e2b882f8f0967b719e1898da.bindPopup(popup_fbce9f6842e8153a52b873847310a8dc)
+        ;
+
+        
+    
+    
+            polygon_5ef02022e2b882f8f0967b719e1898da.bindTooltip(
+                `<div>
+                     <span style="font-family: Georgia; color: #F2CC8F;">Sweet Auburn / Old Fourth Ward</span>
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_a2b9842aa9e46c2c29aadc0436e8db2f = L.marker(
+                [33.756, -84.376],
+                {
+}
+            ).addTo(feature_group_879f563b7619c1898f26ece6f93436b8);
+        
+    
+            var div_icon_e1ec3f40cd27e4a06301a5d00a8209ba = L.divIcon({
+  "html": "\u003cdiv style=\"\n                font-family: Georgia, serif;\n                font-size: 11px;\n                color: #F2CC8F;\n                text-shadow: 0 0 6px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.8);\n                white-space: nowrap;\n                text-align: center;\n                font-weight: bold;\n                pointer-events: none;\n                transform: translate(-50%, -50%);\n            \"\u003eSweet Auburn / Old Fourth Ward\u003c/div\u003e",
+  "iconSize": [200, 30],
+  "iconAnchor": [100, 15],
+  "className": "empty",
+});
+        
+    
+                marker_a2b9842aa9e46c2c29aadc0436e8db2f.setIcon(div_icon_e1ec3f40cd27e4a06301a5d00a8209ba);
+            
+    
+            var polygon_a4bbfcbded3ac1dc975ead5f7bdd5fd1 = L.polygon(
+                [[33.736, -84.422], [33.736, -84.41], [33.733, -84.406], [33.728, -84.404], [33.723, -84.406], [33.722, -84.414], [33.724, -84.422], [33.73, -84.424], [33.736, -84.422]],
+                {"bubblingMouseEvents": true, "color": "#7B68AE", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#7B68AE", "fillOpacity": 0.25, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(feature_group_879f563b7619c1898f26ece6f93436b8);
+        
+    
+        var popup_d562fd6fbc39f4bab8fe26165231d0d4 = L.popup({
+  "maxWidth": 420,
+});
+
+        
+            
+                var html_ab84e5a318bbbddbc80a8f5fbc203720 = $(`<div id="html_ab84e5a318bbbddbc80a8f5fbc203720" style="width: 100.0%; height: 100.0%;">     <div style="         background: #1a1a2e;         color: #e0e0e0;         padding: 20px;         border-radius: 8px;         font-family: Georgia, 'Times New Roman', serif;         max-width: 380px;         line-height: 1.6;         border-left: 4px solid #7B68AE;     ">         <h3 style="             color: #7B68AE;             margin: 0 0 4px 0;             font-size: 20px;             letter-spacing: 0.5px;         ">Pittsburgh</h3>         <div style="             color: #888;             font-size: 12px;             font-family: 'Courier New', monospace;             margin-bottom: 14px;             text-transform: uppercase;             letter-spacing: 1px;         ">Founded 1883</div>          <div style="margin-bottom: 14px;">             <div style="                 color: #81B29A;                 font-size: 11px;                 font-family: 'Courier New', monospace;                 text-transform: uppercase;                 letter-spacing: 1.5px;                 margin-bottom: 6px;             ">BEFORE</div>             <p style="margin: 0; font-size: 13px; color: #ccc;">A Black working-class suburb founded alongside the Pegram rail shops. Named for its industrial character reminiscent of Pittsburgh, PA. A self-sustaining community with deep social networks and mutual aid traditions.</p>         </div>          <div style="margin-bottom: 14px;">             <div style="                 color: #d32f2f;                 font-size: 11px;                 font-family: 'Courier New', monospace;                 text-transform: uppercase;                 letter-spacing: 1.5px;                 margin-bottom: 6px;             ">AFTER</div>             <p style="margin: 0; font-size: 13px; color: #ccc;">Bounded on the north by I-20. Deprived of public and private investment. Population fell 50% from 7,276 in 1970 to 3,624 in 1990. Abandoned houses proliferated.</p>         </div>          <div style="             background: #0d1117;             padding: 10px 14px;             border-radius: 4px;             margin-top: 10px;         ">             <span style="                 color: #9B2226;                 font-family: 'Courier New', monospace;                 font-size: 11px;                 text-transform: uppercase;                 letter-spacing: 1px;             ">DISPLACED:</span>             <span style="color: #e0e0e0; font-size: 14px; margin-left: 8px;">Population halved over two decades</span>         </div>     </div>     </div>`)[0];
+                popup_d562fd6fbc39f4bab8fe26165231d0d4.setContent(html_ab84e5a318bbbddbc80a8f5fbc203720);
+            
+        
+
+        polygon_a4bbfcbded3ac1dc975ead5f7bdd5fd1.bindPopup(popup_d562fd6fbc39f4bab8fe26165231d0d4)
+        ;
+
+        
+    
+    
+            polygon_a4bbfcbded3ac1dc975ead5f7bdd5fd1.bindTooltip(
+                `<div>
+                     <span style="font-family: Georgia; color: #7B68AE;">Pittsburgh</span>
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_6bc36bf427c833d98b9e577bbadd5b92 = L.marker(
+                [33.73, -84.413],
+                {
+}
+            ).addTo(feature_group_879f563b7619c1898f26ece6f93436b8);
+        
+    
+            var div_icon_f47216a2f45acb5202f9f229be7e6c7d = L.divIcon({
+  "html": "\u003cdiv style=\"\n                font-family: Georgia, serif;\n                font-size: 11px;\n                color: #7B68AE;\n                text-shadow: 0 0 6px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.8);\n                white-space: nowrap;\n                text-align: center;\n                font-weight: bold;\n                pointer-events: none;\n                transform: translate(-50%, -50%);\n            \"\u003ePittsburgh\u003c/div\u003e",
+  "iconSize": [200, 30],
+  "iconAnchor": [100, 15],
+  "className": "empty",
+});
+        
+    
+                marker_6bc36bf427c833d98b9e577bbadd5b92.setIcon(div_icon_f47216a2f45acb5202f9f229be7e6c7d);
+            
+    
+            var polygon_c23c47ea2598a95054d7a555efaa63ca = L.polygon(
+                [[33.764, -84.425], [33.764, -84.408], [33.76, -84.405], [33.754, -84.405], [33.75, -84.408], [33.75, -84.42], [33.754, -84.426], [33.76, -84.426], [33.764, -84.425]],
+                {"bubblingMouseEvents": true, "color": "#BC6C25", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#BC6C25", "fillOpacity": 0.25, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(feature_group_879f563b7619c1898f26ece6f93436b8);
+        
+    
+        var popup_b9cf7b0c2f25bac72046c661eaa5b49b = L.popup({
+  "maxWidth": 420,
+});
+
+        
+            
+                var html_7b1d099a2439156321b3812bde624e74 = $(`<div id="html_7b1d099a2439156321b3812bde624e74" style="width: 100.0%; height: 100.0%;">     <div style="         background: #1a1a2e;         color: #e0e0e0;         padding: 20px;         border-radius: 8px;         font-family: Georgia, 'Times New Roman', serif;         max-width: 380px;         line-height: 1.6;         border-left: 4px solid #BC6C25;     ">         <h3 style="             color: #BC6C25;             margin: 0 0 4px 0;             font-size: 20px;             letter-spacing: 0.5px;         ">Vine City / English Avenue</h3>         <div style="             color: #888;             font-size: 12px;             font-family: 'Courier New', monospace;             margin-bottom: 14px;             text-transform: uppercase;             letter-spacing: 1px;         ">Early 1900s</div>          <div style="margin-bottom: 14px;">             <div style="                 color: #81B29A;                 font-size: 11px;                 font-family: 'Courier New', monospace;                 text-transform: uppercase;                 letter-spacing: 1.5px;                 margin-bottom: 6px;             ">BEFORE</div>             <p style="margin: 0; font-size: 13px; color: #ccc;">Home to the Atlanta University Center consortium of HBCUs. A middle-class Black neighborhood with strong institutional anchors. Dense residential streets with community infrastructure.</p>         </div>          <div style="margin-bottom: 14px;">             <div style="                 color: #d32f2f;                 font-size: 11px;                 font-family: 'Courier New', monospace;                 text-transform: uppercase;                 letter-spacing: 1.5px;                 margin-bottom: 6px;             ">AFTER</div>             <p style="margin: 0; font-size: 13px; color: #ccc;">Cut off by highway construction and urban renewal. Redlined and disinvested. Became one of Atlanta's most impoverished areas despite proximity to downtown and major institutions.</p>         </div>          <div style="             background: #0d1117;             padding: 10px 14px;             border-radius: 4px;             margin-top: 10px;         ">             <span style="                 color: #9B2226;                 font-family: 'Courier New', monospace;                 font-size: 11px;                 text-transform: uppercase;                 letter-spacing: 1px;             ">DISPLACED:</span>             <span style="color: #e0e0e0; font-size: 14px; margin-left: 8px;">Significant residential displacement</span>         </div>     </div>     </div>`)[0];
+                popup_b9cf7b0c2f25bac72046c661eaa5b49b.setContent(html_7b1d099a2439156321b3812bde624e74);
+            
+        
+
+        polygon_c23c47ea2598a95054d7a555efaa63ca.bindPopup(popup_b9cf7b0c2f25bac72046c661eaa5b49b)
+        ;
+
+        
+    
+    
+            polygon_c23c47ea2598a95054d7a555efaa63ca.bindTooltip(
+                `<div>
+                     <span style="font-family: Georgia; color: #BC6C25;">Vine City / English Avenue</span>
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_924d1f0fee0bcfeb0a825e9e3c1f57b2 = L.marker(
+                [33.758, -84.415],
+                {
+}
+            ).addTo(feature_group_879f563b7619c1898f26ece6f93436b8);
+        
+    
+            var div_icon_dfa5cc3c01c3f227a3c81953500ae9ff = L.divIcon({
+  "html": "\u003cdiv style=\"\n                font-family: Georgia, serif;\n                font-size: 11px;\n                color: #BC6C25;\n                text-shadow: 0 0 6px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.8);\n                white-space: nowrap;\n                text-align: center;\n                font-weight: bold;\n                pointer-events: none;\n                transform: translate(-50%, -50%);\n            \"\u003eVine City / English Avenue\u003c/div\u003e",
+  "iconSize": [200, 30],
+  "iconAnchor": [100, 15],
+  "className": "empty",
+});
+        
+    
+                marker_924d1f0fee0bcfeb0a825e9e3c1f57b2.setIcon(div_icon_dfa5cc3c01c3f227a3c81953500ae9ff);
+            
+    
+            var polygon_c9fe05508b7ec517f4b5f77f35c86480 = L.polygon(
+                [[33.77, -84.39], [33.77, -84.378], [33.767, -84.375], [33.761, -84.375], [33.758, -84.378], [33.758, -84.388], [33.761, -84.391], [33.767, -84.391], [33.77, -84.39]],
+                {"bubblingMouseEvents": true, "color": "#9B2226", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#9B2226", "fillOpacity": 0.25, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(feature_group_879f563b7619c1898f26ece6f93436b8);
+        
+    
+        var popup_ed598c2ede126c6521d7006191f23a3e = L.popup({
+  "maxWidth": 420,
+});
+
+        
+            
+                var html_3ccc796a5afc3c9e8b46a460bb221868 = $(`<div id="html_3ccc796a5afc3c9e8b46a460bb221868" style="width: 100.0%; height: 100.0%;">     <div style="         background: #1a1a2e;         color: #e0e0e0;         padding: 20px;         border-radius: 8px;         font-family: Georgia, 'Times New Roman', serif;         max-width: 380px;         line-height: 1.6;         border-left: 4px solid #9B2226;     ">         <h3 style="             color: #9B2226;             margin: 0 0 4px 0;             font-size: 20px;             letter-spacing: 0.5px;         ">Buttermilk Bottom</h3>         <div style="             color: #888;             font-size: 12px;             font-family: 'Courier New', monospace;             margin-bottom: 14px;             text-transform: uppercase;             letter-spacing: 1px;         ">Post-Civil War–1960s</div>          <div style="margin-bottom: 14px;">             <div style="                 color: #81B29A;                 font-size: 11px;                 font-family: 'Courier New', monospace;                 text-transform: uppercase;                 letter-spacing: 1.5px;                 margin-bottom: 6px;             ">BEFORE</div>             <p style="margin: 0; font-size: 13px; color: #ccc;">A dense Black neighborhood northeast of downtown. A community of working families, churches, and small businesses. One of the oldest Black settlements in Atlanta.</p>         </div>          <div style="margin-bottom: 14px;">             <div style="                 color: #d32f2f;                 font-size: 11px;                 font-family: 'Courier New', monospace;                 text-transform: uppercase;                 letter-spacing: 1.5px;                 margin-bottom: 6px;             ">AFTER</div>             <p style="margin: 0; font-size: 13px; color: #ccc;">Entirely demolished under “urban renewal.” Replaced by the Atlanta Civic Center. The neighborhood was erased from the map completely.</p>         </div>          <div style="             background: #0d1117;             padding: 10px 14px;             border-radius: 4px;             margin-top: 10px;         ">             <span style="                 color: #9B2226;                 font-family: 'Courier New', monospace;                 font-size: 11px;                 text-transform: uppercase;                 letter-spacing: 1px;             ">DISPLACED:</span>             <span style="color: #e0e0e0; font-size: 14px; margin-left: 8px;">Entire community displaced</span>         </div>     </div>     </div>`)[0];
+                popup_ed598c2ede126c6521d7006191f23a3e.setContent(html_3ccc796a5afc3c9e8b46a460bb221868);
+            
+        
+
+        polygon_c9fe05508b7ec517f4b5f77f35c86480.bindPopup(popup_ed598c2ede126c6521d7006191f23a3e)
+        ;
+
+        
+    
+    
+            polygon_c9fe05508b7ec517f4b5f77f35c86480.bindTooltip(
+                `<div>
+                     <span style="font-family: Georgia; color: #9B2226;">Buttermilk Bottom</span>
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_e66ec50640a813d81e7300a5652e8d16 = L.marker(
+                [33.764, -84.383],
+                {
+}
+            ).addTo(feature_group_879f563b7619c1898f26ece6f93436b8);
+        
+    
+            var div_icon_c28e9e6f8bcd4521920c7e8f156a4aa7 = L.divIcon({
+  "html": "\u003cdiv style=\"\n                font-family: Georgia, serif;\n                font-size: 11px;\n                color: #9B2226;\n                text-shadow: 0 0 6px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.8);\n                white-space: nowrap;\n                text-align: center;\n                font-weight: bold;\n                pointer-events: none;\n                transform: translate(-50%, -50%);\n            \"\u003eButtermilk Bottom\u003c/div\u003e",
+  "iconSize": [200, 30],
+  "iconAnchor": [100, 15],
+  "className": "empty",
+});
+        
+    
+                marker_e66ec50640a813d81e7300a5652e8d16.setIcon(div_icon_c28e9e6f8bcd4521920c7e8f156a4aa7);
+            
+    
+            var polygon_defaca7a8d7d1acce60e72e3a7b2ad87 = L.polygon(
+                [[33.738, -84.392], [33.738, -84.38], [33.735, -84.376], [33.729, -84.376], [33.726, -84.38], [33.726, -84.39], [33.729, -84.393], [33.735, -84.393], [33.738, -84.392]],
+                {"bubblingMouseEvents": true, "color": "#606C38", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#606C38", "fillOpacity": 0.25, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(feature_group_879f563b7619c1898f26ece6f93436b8);
+        
+    
+        var popup_2152019de134da01ca29714f8b2b5f10 = L.popup({
+  "maxWidth": 420,
+});
+
+        
+            
+                var html_77fd101d4ba5b40a062ef7199faa77a8 = $(`<div id="html_77fd101d4ba5b40a062ef7199faa77a8" style="width: 100.0%; height: 100.0%;">     <div style="         background: #1a1a2e;         color: #e0e0e0;         padding: 20px;         border-radius: 8px;         font-family: Georgia, 'Times New Roman', serif;         max-width: 380px;         line-height: 1.6;         border-left: 4px solid #606C38;     ">         <h3 style="             color: #606C38;             margin: 0 0 4px 0;             font-size: 20px;             letter-spacing: 0.5px;         ">Peoplestown</h3>         <div style="             color: #888;             font-size: 12px;             font-family: 'Courier New', monospace;             margin-bottom: 14px;             text-transform: uppercase;             letter-spacing: 1px;         ">Post-Reconstruction</div>          <div style="margin-bottom: 14px;">             <div style="                 color: #81B29A;                 font-size: 11px;                 font-family: 'Courier New', monospace;                 text-transform: uppercase;                 letter-spacing: 1.5px;                 margin-bottom: 6px;             ">BEFORE</div>             <p style="margin: 0; font-size: 13px; color: #ccc;">A historically Black neighborhood south of downtown with strong community bonds. Working-class families with deep roots in the area.</p>         </div>          <div style="margin-bottom: 14px;">             <div style="                 color: #d32f2f;                 font-size: 11px;                 font-family: 'Courier New', monospace;                 text-transform: uppercase;                 letter-spacing: 1.5px;                 margin-bottom: 6px;             ">AFTER</div>             <p style="margin: 0; font-size: 13px; color: #ccc;">Hemmed in by I-20 to the north and urban renewal clearance. Lost connectivity to surrounding neighborhoods and downtown.</p>         </div>          <div style="             background: #0d1117;             padding: 10px 14px;             border-radius: 4px;             margin-top: 10px;         ">             <span style="                 color: #9B2226;                 font-family: 'Courier New', monospace;                 font-size: 11px;                 text-transform: uppercase;                 letter-spacing: 1px;             ">DISPLACED:</span>             <span style="color: #e0e0e0; font-size: 14px; margin-left: 8px;">Hundreds of families</span>         </div>     </div>     </div>`)[0];
+                popup_2152019de134da01ca29714f8b2b5f10.setContent(html_77fd101d4ba5b40a062ef7199faa77a8);
+            
+        
+
+        polygon_defaca7a8d7d1acce60e72e3a7b2ad87.bindPopup(popup_2152019de134da01ca29714f8b2b5f10)
+        ;
+
+        
+    
+    
+            polygon_defaca7a8d7d1acce60e72e3a7b2ad87.bindTooltip(
+                `<div>
+                     <span style="font-family: Georgia; color: #606C38;">Peoplestown</span>
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_7f7954442b8c73d228c90e37538aae56 = L.marker(
+                [33.733, -84.385],
+                {
+}
+            ).addTo(feature_group_879f563b7619c1898f26ece6f93436b8);
+        
+    
+            var div_icon_ccfd67d14feea2d590d2a36f374b450a = L.divIcon({
+  "html": "\u003cdiv style=\"\n                font-family: Georgia, serif;\n                font-size: 11px;\n                color: #606C38;\n                text-shadow: 0 0 6px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.8);\n                white-space: nowrap;\n                text-align: center;\n                font-weight: bold;\n                pointer-events: none;\n                transform: translate(-50%, -50%);\n            \"\u003ePeoplestown\u003c/div\u003e",
+  "iconSize": [200, 30],
+  "iconAnchor": [100, 15],
+  "className": "empty",
+});
+        
+    
+                marker_7f7954442b8c73d228c90e37538aae56.setIcon(div_icon_ccfd67d14feea2d590d2a36f374b450a);
+            
+    
+            var polygon_f14ba64ecc1b07b6642ca0bf3a8f3726 = L.polygon(
+                [[33.74845145168923, -84.43950970966215], [33.746451451689225, -84.42950970966216], [33.74445145168922, -84.41950970966215], [33.743451451689225, -84.41450970966216], [33.74245145168923, -84.40950970966216], [33.741499999999995, -84.40475245121601], [33.741499999999995, -84.39524754878398], [33.74245145168923, -84.39049029033785], [33.743451451689225, -84.38549029033786], [33.74445145168922, -84.38049029033783], [33.74545145168923, -84.37549029033785], [33.746451451689225, -84.37049029033786], [33.74745145168922, -84.36549029033783], [33.74845145168923, -84.36049029033785], [33.749451451689225, -84.35549029033785], [33.75045145168922, -84.35049029033783], [33.750487592975524, -84.35024875929754], [33.75148759297553, -84.34024875929755], [33.75248759297553, -84.33024875929755], [33.75249999721039, -84.33000373470378], [33.752488325105496, -84.32975867414277], [33.75245268906957, -84.32951593768168], [33.752393432297126, -84.32927786300533], [33.75231112546328, -84.329046742903], [33.75220656122783, -84.32882480318762], [33.752080746601536, -84.32861418125997], [33.751934893248006, -84.32841690552435], [33.75177040581478, -84.32823487585395], [33.75158886840576, -84.32806984529398], [33.75139202932543, -84.32792340317896], [33.75118178424173, -84.32779695982651], [33.750960157929754, -84.32769173295524], [33.75072928477204, -84.32760873595743], [33.75049138820331, -84.32754876813955], [33.75024875929755, -84.32751240702447], [33.750003734703775, -84.3275000027896], [33.74975867414276, -84.32751167489451], [33.74951593768167, -84.32754731093043], [33.74927786300533, -84.32760656770287], [33.749046742903005, -84.32768887453672], [33.748824803187624, -84.32779343877216], [33.748614181259974, -84.32791925339846], [33.74841690552436, -84.32806510675199], [33.748234875853946, -84.32822959418522], [33.74806984529398, -84.32841113159424], [33.74792340317896, -84.32860797067457], [33.747796959826516, -84.32881821575826], [33.74769173295524, -84.32903984207024], [33.747608735957435, -84.32927071522795], [33.74754876813956, -84.3295086117967], [33.74751240702447, -84.32975124070245], [33.746512407024476, -84.33975124070245], [33.74552457194623, -84.34962959148488], [33.744548548310775, -84.35450970966217], [33.74354854831078, -84.35950970966215], [33.74254854831077, -84.36450970966214], [33.741548548310774, -84.36950970966217], [33.74054854831078, -84.37450970966215], [33.73954854831077, -84.37950970966214], [33.738548548310774, -84.38450970966217], [33.73754854831078, -84.38950970966215], [33.73654854831077, -84.39450970966215], [33.736512166683326, -84.39475365595507], [33.7365, -84.395], [33.7365, -84.405], [33.736512166683326, -84.40524634404493], [33.73654854831077, -84.40549029033785], [33.73754854831078, -84.41049029033785], [33.738548548310774, -84.41549029033784], [33.73954854831077, -84.42049029033785], [33.741548548310774, -84.43049029033786], [33.74354854831078, -84.44049029033785], [33.74554854831077, -84.45049029033785], [33.74560840957755, -84.45072821374009], [33.745691303167476, -84.45095912404594], [33.74579643076996, -84.45118079746292], [33.74592277994872, -84.45139109915483], [33.7460691338921, -84.45158800380145], [33.74623408313162, -84.45176961510334], [33.74641603911593, -84.45193418404443], [33.74661324950943, -84.45208012573585], [33.74682381506824, -84.4522060346793], [33.7470457079309, -84.45231069830287], [33.74727679114786, -84.45239310863862], [33.747514839261406, -84.45245247202996], [33.74775755973809, -84.45248821677501], [33.74800261504702, -84.4524999986323], [33.748247645171624, -84.45248770413615], [33.74849029033784, -84.45245145168923], [33.74872821374009, -84.45239159042245], [33.74895912404594, -84.45230869683253], [33.74918079746291, -84.45220356923004], [33.74939109915483, -84.45207722005128], [33.749588003801435, -84.4519308661079], [33.74976961510334, -84.45176591686838], [33.749934184044434, -84.45158396088407], [33.75008012573584, -84.45138675049057], [33.7502060346793, -84.45117618493177], [33.75031069830286, -84.4509542920691], [33.750393108638605, -84.45072320885214], [33.750452472029956, -84.4504851607386], [33.750488216775, -84.45024244026192], [33.7504999986323, -84.44999738495298], [33.75048770413614, -84.44975235482838], [33.75045145168922, -84.44950970966215], [33.74845145168923, -84.43950970966215]],
+                {"bubblingMouseEvents": true, "color": "#d32f2f", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#d32f2f", "fillOpacity": 0.18, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 0}
+            ).addTo(feature_group_879f563b7619c1898f26ece6f93436b8);
+        
+    
+            var polygon_b7004a76dd7c21edbf41fda9e5839d9f = L.polygon(
+                [[33.78539223227027, -84.39203883864862], [33.78039223227028, -84.39103883864863], [33.775572290587135, -84.39007485031199], [33.77074278135271, -84.38814304661823], [33.77056989367984, -84.3880829133578], [33.77039223227028, -84.38803883864863], [33.765514329760066, -84.38706325814658], [33.76263245553203, -84.38610263340391], [33.762485071250076, -84.38605971499972], [33.75855958752763, -84.3850783440691], [33.75563245553204, -84.3841026334039], [33.75263245553203, -84.38310263340391], [33.74963245553204, -84.3821026334039], [33.74942571854917, -84.38204583426575], [33.74921408938731, -84.38201149158054], [33.749, -84.382], [33.746, -84.382], [33.745785910612696, -84.38201149158054], [33.745574281450835, -84.38204583426575], [33.74536754446797, -84.3821026334039], [33.74236754446797, -84.38310263340391], [33.739367544467974, -84.3841026334039], [33.73920186205362, -84.3841661581806], [33.73904246219402, -84.38424411807055], [33.73889059960755, -84.38433589941133], [33.73589059960755, -84.38633589941134], [33.72989059960755, -84.39033589941131], [33.72689059960755, -84.39233589941134], [33.724063869022025, -84.39422038646833], [33.71925721864729, -84.39614304661822], [33.71425721864729, -84.39814304661823], [33.709257218647295, -84.40014304661823], [33.70907878208232, -84.4002247936604], [33.708909217349486, -84.40032363691004], [33.70875015744986, -84.40043862445265], [33.70860313421723, -84.4005686488953], [33.708469563565686, -84.40071245803155], [33.70835073185362, -84.4008686669008], [33.708247783495395, -84.40103577112625], [33.708161709939965, -84.40121216140284], [33.70809334012272, -84.4013961389958], [33.70804333248239, -84.40158593210035], [33.708012168619874, -84.40177971290511], [33.708000148660204, -84.40197561519501], [33.70800738836217, -84.40217175232394], [33.70803381800348, -84.40236623538408], [33.708079183052234, -84.40255719139726], [33.70814304661823, -84.40274278135271], [33.7082247936604, -84.40292121791768], [33.70832363691005, -84.40309078265051], [33.708438624452654, -84.40324984255014], [33.70856864889531, -84.40339686578278], [33.708712458031556, -84.40353043643432], [33.7088686669008, -84.40364926814638], [33.709035771126246, -84.4037522165046], [33.70921216140284, -84.40383829006004], [33.70939613899581, -84.40390665987728], [33.709585932100346, -84.40395666751762], [33.70977971290511, -84.40398783138014], [33.70997561519502, -84.4039998513398], [33.71017175232393, -84.40399261163783], [33.71036623538407, -84.40396618199652], [33.710557191397264, -84.40392081694776], [33.71074278135271, -84.40385695338178], [33.71574278135271, -84.40185695338178], [33.72074278135271, -84.39985695338177], [33.72574278135271, -84.39785695338178], [33.72593109739245, -84.39777004453215], [33.72610940039245, -84.39766410058868], [33.72910940039245, -84.39566410058869], [33.73210940039245, -84.39366410058867], [33.73810940039245, -84.38966410058869], [33.740886547230595, -84.38781266936324], [33.74363245553203, -84.3868973665961], [33.74632455532034, -84.386], [33.74867544467966, -84.386], [33.75136754446797, -84.3868973665961], [33.754367544467975, -84.38789736659609], [33.75736754446797, -84.3888973665961], [33.75751492874993, -84.38894028500029], [33.7614404124724, -84.38992165593092], [33.76436754446797, -84.39089736659609], [33.76460776772972, -84.39096116135137], [33.76942770941287, -84.391925149688], [33.77425721864729, -84.39385695338177], [33.77443010632016, -84.39391708664219], [33.77460776772972, -84.39396116135137], [33.77960776772972, -84.39496116135138], [33.78460776772972, -84.39596116135138], [33.78960776772973, -84.39696116135138], [33.7898018838627, -84.39699016330891], [33.78999790796238, -84.39699999890584], [33.79019395220953, -84.39699057342], [33.79038812859087, -84.39696197762396], [33.79057856708171, -84.39691448691089], [33.79076343365528, -84.39684855864229], [33.79094094794541, -84.39676482774344], [33.79110940039245, -84.39666410058867], [33.79126716870726, -84.39654734723554], [33.7914127334947, -84.39641569208267], [33.79154469288632, -84.39627040304114], [33.791661776041025, -84.39611287932387], [33.79176285538403, -84.39594463797033], [33.79184695746602, -84.39576729923675], [33.79191327233796, -84.39558257099206], [33.79196116135138, -84.39539223227027], [33.79199016330891, -84.3951981161373], [33.791999998905844, -84.39500209203761], [33.79199057342, -84.39480604779047], [33.79196197762396, -84.39461187140913], [33.79191448691088, -84.39442143291828], [33.791848558642286, -84.39423656634472], [33.79176482774344, -84.39405905205459], [33.791664100588676, -84.39389059960754], [33.79154734723554, -84.39373283129274], [33.79141569208267, -84.39358726650529], [33.791270403041146, -84.39345530711368], [33.79111287932386, -84.39333822395898], [33.79094463797033, -84.39323714461597], [33.79076729923675, -84.39315304253398], [33.79058257099207, -84.39308672766204], [33.79039223227027, -84.39303883864861], [33.78539223227027, -84.39203883864862]],
+                {"bubblingMouseEvents": true, "color": "#e65100", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#e65100", "fillOpacity": 0.15, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 0}
+            ).addTo(feature_group_879f563b7619c1898f26ece6f93436b8);
+        
+    
+            var poly_line_57eee4bd4f6ec68e90ee2e381d68fd1a = L.polyline(
+                [[33.748, -84.45], [33.746, -84.44], [33.744, -84.43], [33.742, -84.42], [33.741, -84.415], [33.74, -84.41], [33.739, -84.405], [33.739, -84.4], [33.739, -84.395], [33.74, -84.39], [33.741, -84.385], [33.742, -84.38], [33.743, -84.375], [33.744, -84.37], [33.745, -84.365], [33.746, -84.36], [33.747, -84.355], [33.748, -84.35], [33.749, -84.34], [33.75, -84.33]],
+                {"bubblingMouseEvents": true, "color": "#d32f2f", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#d32f2f", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.2, "smoothFactor": 1.0, "stroke": true, "weight": 14}
+            ).addTo(feature_group_879f563b7619c1898f26ece6f93436b8);
+        
+    
+            var poly_line_743f6035ca4500564a31447de6eb0a67 = L.polyline(
+                [[33.748, -84.45], [33.746, -84.44], [33.744, -84.43], [33.742, -84.42], [33.741, -84.415], [33.74, -84.41], [33.739, -84.405], [33.739, -84.4], [33.739, -84.395], [33.74, -84.39], [33.741, -84.385], [33.742, -84.38], [33.743, -84.375], [33.744, -84.37], [33.745, -84.365], [33.746, -84.36], [33.747, -84.355], [33.748, -84.35], [33.749, -84.34], [33.75, -84.33]],
+                {"bubblingMouseEvents": true, "color": "#d32f2f", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#d32f2f", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.9, "smoothFactor": 1.0, "stroke": true, "weight": 6}
+            ).addTo(feature_group_879f563b7619c1898f26ece6f93436b8);
+        
+    
+            var poly_line_4c8ca3a5431dffd95906f446339fdfd3 = L.polyline(
+                [[33.748, -84.45], [33.746, -84.44], [33.744, -84.43], [33.742, -84.42], [33.741, -84.415], [33.74, -84.41], [33.739, -84.405], [33.739, -84.4], [33.739, -84.395], [33.74, -84.39], [33.741, -84.385], [33.742, -84.38], [33.743, -84.375], [33.744, -84.37], [33.745, -84.365], [33.746, -84.36], [33.747, -84.355], [33.748, -84.35], [33.749, -84.34], [33.75, -84.33]],
+                {"bubblingMouseEvents": true, "color": "#ff6659", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#ff6659", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.7, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(feature_group_879f563b7619c1898f26ece6f93436b8);
+        
+    
+            var poly_line_346f88eed7b07e15df97b2a15a73c0e0 = L.polyline(
+                [[33.79, -84.395], [33.785, -84.394], [33.78, -84.393], [33.775, -84.392], [33.77, -84.39], [33.765, -84.389], [33.762, -84.388], [33.758, -84.387], [33.755, -84.386], [33.752, -84.385], [33.749, -84.384], [33.746, -84.384], [33.743, -84.385], [33.74, -84.386], [33.737, -84.388], [33.734, -84.39], [33.731, -84.392], [33.728, -84.394], [33.725, -84.396], [33.72, -84.398], [33.715, -84.4], [33.71, -84.402]],
+                {"bubblingMouseEvents": true, "color": "#e65100", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#e65100", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.2, "smoothFactor": 1.0, "stroke": true, "weight": 14}
+            ).addTo(feature_group_879f563b7619c1898f26ece6f93436b8);
+        
+    
+            var poly_line_7d9fdf3a518e40fc7acfe4e6e418e433 = L.polyline(
+                [[33.79, -84.395], [33.785, -84.394], [33.78, -84.393], [33.775, -84.392], [33.77, -84.39], [33.765, -84.389], [33.762, -84.388], [33.758, -84.387], [33.755, -84.386], [33.752, -84.385], [33.749, -84.384], [33.746, -84.384], [33.743, -84.385], [33.74, -84.386], [33.737, -84.388], [33.734, -84.39], [33.731, -84.392], [33.728, -84.394], [33.725, -84.396], [33.72, -84.398], [33.715, -84.4], [33.71, -84.402]],
+                {"bubblingMouseEvents": true, "color": "#e65100", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#e65100", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.9, "smoothFactor": 1.0, "stroke": true, "weight": 6}
+            ).addTo(feature_group_879f563b7619c1898f26ece6f93436b8);
+        
+    
+            var poly_line_d684a19896286abf21bc2f0cdd8e30ad = L.polyline(
+                [[33.79, -84.395], [33.785, -84.394], [33.78, -84.393], [33.775, -84.392], [33.77, -84.39], [33.765, -84.389], [33.762, -84.388], [33.758, -84.387], [33.755, -84.386], [33.752, -84.385], [33.749, -84.384], [33.746, -84.384], [33.743, -84.385], [33.74, -84.386], [33.737, -84.388], [33.734, -84.39], [33.731, -84.392], [33.728, -84.394], [33.725, -84.396], [33.72, -84.398], [33.715, -84.4], [33.71, -84.402]],
+                {"bubblingMouseEvents": true, "color": "#ff9800", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#ff9800", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.7, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(feature_group_879f563b7619c1898f26ece6f93436b8);
+        
+    
+            var marker_e4f97b667abb563f1767533e7059b1b3 = L.marker(
+                [33.7548, -84.3716],
+                {
+}
+            ).addTo(feature_group_879f563b7619c1898f26ece6f93436b8);
+        
+    
+            var icon_827ec107e2e3740fb133cb79331bb34d = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "beige",
+  "iconColor": "#1a1a2e",
+  "icon": "fa-church",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_fcc024003ed2d89417d4f1d19800c083 = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_34dc88e23738aa94e11ae9f82a0e447b = $(`<div id="html_34dc88e23738aa94e11ae9f82a0e447b" style="width: 100.0%; height: 100.0%;">     <div style="         background: #1a1a2e;         color: #e0e0e0;         padding: 16px;         border-radius: 8px;         font-family: Georgia, 'Times New Roman', serif;         max-width: 300px;         line-height: 1.5;         border-left: 4px solid #F2CC8F;     ">         <h4 style="color: #F2CC8F; margin: 0 0 8px 0; font-size: 16px;">Ebenezer Baptist Church</h4>         <p style="margin: 0; font-size: 13px; color: #ccc;">Spiritual home of the Civil Rights Movement. Co-pastored by Martin Luther King Sr. and Jr.</p>     </div>     </div>`)[0];
+                popup_fcc024003ed2d89417d4f1d19800c083.setContent(html_34dc88e23738aa94e11ae9f82a0e447b);
+            
+        
+
+        marker_e4f97b667abb563f1767533e7059b1b3.bindPopup(popup_fcc024003ed2d89417d4f1d19800c083)
+        ;
+
+        
+    
+    
+            marker_e4f97b667abb563f1767533e7059b1b3.bindTooltip(
+                `<div>
+                     Ebenezer Baptist Church
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_e4f97b667abb563f1767533e7059b1b3.setIcon(icon_827ec107e2e3740fb133cb79331bb34d);
+            
+    
+            var marker_8e267d3e7bdb52768c91e515e06b58e6 = L.marker(
+                [33.755, -84.372],
+                {
+}
+            ).addTo(feature_group_879f563b7619c1898f26ece6f93436b8);
+        
+    
+            var icon_1194fe79fca5db066c3489580a8e58f6 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "beige",
+  "iconColor": "#1a1a2e",
+  "icon": "fa-home",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_1df1d4751eb465048a7693322e0750bd = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_20cf6456985d35d50832d3108af3b3aa = $(`<div id="html_20cf6456985d35d50832d3108af3b3aa" style="width: 100.0%; height: 100.0%;">     <div style="         background: #1a1a2e;         color: #e0e0e0;         padding: 16px;         border-radius: 8px;         font-family: Georgia, 'Times New Roman', serif;         max-width: 300px;         line-height: 1.5;         border-left: 4px solid #F2CC8F;     ">         <h4 style="color: #F2CC8F; margin: 0 0 8px 0; font-size: 16px;">MLK Birth Home</h4>         <p style="margin: 0; font-size: 13px; color: #ccc;">Birthplace of Dr. Martin Luther King Jr., January 15, 1929.</p>     </div>     </div>`)[0];
+                popup_1df1d4751eb465048a7693322e0750bd.setContent(html_20cf6456985d35d50832d3108af3b3aa);
+            
+        
+
+        marker_8e267d3e7bdb52768c91e515e06b58e6.bindPopup(popup_1df1d4751eb465048a7693322e0750bd)
+        ;
+
+        
+    
+    
+            marker_8e267d3e7bdb52768c91e515e06b58e6.bindTooltip(
+                `<div>
+                     MLK Birth Home
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_8e267d3e7bdb52768c91e515e06b58e6.setIcon(icon_1194fe79fca5db066c3489580a8e58f6);
+            
+    
+            var marker_a772e2178880a8fcdc3f1c437b2890f3 = L.marker(
+                [33.7545, -84.379],
+                {
+}
+            ).addTo(feature_group_879f563b7619c1898f26ece6f93436b8);
+        
+    
+            var icon_3c48df23f3ec220284bb9d864216cb1b = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "beige",
+  "iconColor": "#1a1a2e",
+  "icon": "fa-building",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_97d244d4619d23a49c99e20e8c3630e1 = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_6d5aea033e6c7e745550487fb6fee6be = $(`<div id="html_6d5aea033e6c7e745550487fb6fee6be" style="width: 100.0%; height: 100.0%;">     <div style="         background: #1a1a2e;         color: #e0e0e0;         padding: 16px;         border-radius: 8px;         font-family: Georgia, 'Times New Roman', serif;         max-width: 300px;         line-height: 1.5;         border-left: 4px solid #F2CC8F;     ">         <h4 style="color: #F2CC8F; margin: 0 0 8px 0; font-size: 16px;">Atlanta Life Insurance Co.</h4>         <p style="margin: 0; font-size: 13px; color: #ccc;">Originally targeted for demolition by highway planners. Community protest moved the route, but Auburn Ave was still severed.</p>     </div>     </div>`)[0];
+                popup_97d244d4619d23a49c99e20e8c3630e1.setContent(html_6d5aea033e6c7e745550487fb6fee6be);
+            
+        
+
+        marker_a772e2178880a8fcdc3f1c437b2890f3.bindPopup(popup_97d244d4619d23a49c99e20e8c3630e1)
+        ;
+
+        
+    
+    
+            marker_a772e2178880a8fcdc3f1c437b2890f3.bindTooltip(
+                `<div>
+                     Atlanta Life Insurance Co.
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_a772e2178880a8fcdc3f1c437b2890f3.setIcon(icon_3c48df23f3ec220284bb9d864216cb1b);
+            
+    
+            var marker_f5cbbb223d09b17fb0e57c6f6823c7e4 = L.marker(
+                [33.753, -84.413],
+                {
+}
+            ).addTo(feature_group_879f563b7619c1898f26ece6f93436b8);
+        
+    
+            var icon_5c74bf57f910b6902d664d56e63dbbc4 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "beige",
+  "iconColor": "#1a1a2e",
+  "icon": "fa-university",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_0e4caa6527a093775c234b54ac894a5d = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_745f0b19ab2974334e575f8923d948b9 = $(`<div id="html_745f0b19ab2974334e575f8923d948b9" style="width: 100.0%; height: 100.0%;">     <div style="         background: #1a1a2e;         color: #e0e0e0;         padding: 16px;         border-radius: 8px;         font-family: Georgia, 'Times New Roman', serif;         max-width: 300px;         line-height: 1.5;         border-left: 4px solid #F2CC8F;     ">         <h4 style="color: #F2CC8F; margin: 0 0 8px 0; font-size: 16px;">Atlanta University Center</h4>         <p style="margin: 0; font-size: 13px; color: #ccc;">Consortium of HBCUs including Morehouse, Spelman, and Clark Atlanta. An anchor of Black intellectual life.</p>     </div>     </div>`)[0];
+                popup_0e4caa6527a093775c234b54ac894a5d.setContent(html_745f0b19ab2974334e575f8923d948b9);
+            
+        
+
+        marker_f5cbbb223d09b17fb0e57c6f6823c7e4.bindPopup(popup_0e4caa6527a093775c234b54ac894a5d)
+        ;
+
+        
+    
+    
+            marker_f5cbbb223d09b17fb0e57c6f6823c7e4.bindTooltip(
+                `<div>
+                     Atlanta University Center
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_f5cbbb223d09b17fb0e57c6f6823c7e4.setIcon(icon_5c74bf57f910b6902d664d56e63dbbc4);
+            
+    
+            var marker_cae37d7d6fdf8516b58871602842f6fc = L.marker(
+                [33.749, -84.388],
+                {
+}
+            ).addTo(feature_group_879f563b7619c1898f26ece6f93436b8);
+        
+    
+            var icon_5c14593b0dad35f8df3e7bf8d22d5e9d = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "beige",
+  "iconColor": "#1a1a2e",
+  "icon": "fa-landmark",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_dce4dcb624815cec241f5465fe12316d = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_ce2037b40d1530a848ebd4caa56ae364 = $(`<div id="html_ce2037b40d1530a848ebd4caa56ae364" style="width: 100.0%; height: 100.0%;">     <div style="         background: #1a1a2e;         color: #e0e0e0;         padding: 16px;         border-radius: 8px;         font-family: Georgia, 'Times New Roman', serif;         max-width: 300px;         line-height: 1.5;         border-left: 4px solid #F2CC8F;     ">         <h4 style="color: #F2CC8F; margin: 0 0 8px 0; font-size: 16px;">Georgia State Capitol</h4>         <p style="margin: 0; font-size: 13px; color: #ccc;">State Capitol building. Highway routes were planned to protect white neighborhoods and government properties.</p>     </div>     </div>`)[0];
+                popup_dce4dcb624815cec241f5465fe12316d.setContent(html_ce2037b40d1530a848ebd4caa56ae364);
+            
+        
+
+        marker_cae37d7d6fdf8516b58871602842f6fc.bindPopup(popup_dce4dcb624815cec241f5465fe12316d)
+        ;
+
+        
+    
+    
+            marker_cae37d7d6fdf8516b58871602842f6fc.bindTooltip(
+                `<div>
+                     Georgia State Capitol
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_cae37d7d6fdf8516b58871602842f6fc.setIcon(icon_5c14593b0dad35f8df3e7bf8d22d5e9d);
+            
+    
+            var marker_9c9a44ea72632915ae8ef4856ec972d5 = L.marker(
+                [33.7483, -84.3713],
+                {
+}
+            ).addTo(feature_group_879f563b7619c1898f26ece6f93436b8);
+        
+    
+            var icon_d95054eb679fda0ad34f09897138d857 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "beige",
+  "iconColor": "#1a1a2e",
+  "icon": "fa-monument",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_b5565cf90702c02c7578706fe5039b3b = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_a15672318df71c603b39317e43a4e007 = $(`<div id="html_a15672318df71c603b39317e43a4e007" style="width: 100.0%; height: 100.0%;">     <div style="         background: #1a1a2e;         color: #e0e0e0;         padding: 16px;         border-radius: 8px;         font-family: Georgia, 'Times New Roman', serif;         max-width: 300px;         line-height: 1.5;         border-left: 4px solid #F2CC8F;     ">         <h4 style="color: #F2CC8F; margin: 0 0 8px 0; font-size: 16px;">Oakland Cemetery</h4>         <p style="margin: 0; font-size: 13px; color: #ccc;">Historic cemetery est. 1850. Segregated burial grounds reflect the city's racial divisions.</p>     </div>     </div>`)[0];
+                popup_b5565cf90702c02c7578706fe5039b3b.setContent(html_a15672318df71c603b39317e43a4e007);
+            
+        
+
+        marker_9c9a44ea72632915ae8ef4856ec972d5.bindPopup(popup_b5565cf90702c02c7578706fe5039b3b)
+        ;
+
+        
+    
+    
+            marker_9c9a44ea72632915ae8ef4856ec972d5.bindTooltip(
+                `<div>
+                     Oakland Cemetery
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_9c9a44ea72632915ae8ef4856ec972d5.setIcon(icon_d95054eb679fda0ad34f09897138d857);
+            
+    
+            var layer_control_cff3f5a808b1076843b24e14aacc91ad_layers = {
+                base_layers : {
+                    "CartoDB Dark Matter" : tile_layer_6bf4fc3abb1680bdb541f60e11d43cfb,
+                },
+                overlays :  {
+                    "\ud83c\udfd8\ufe0f Before Highways" : feature_group_12d33d8b496683fc87b90a4cf3efcb77,
+                    "\ud83d\udea7 After Construction" : feature_group_38299e0446d0b44c1e03c5a0590b7757,
+                    "\ud83d\udd0d Overlay \u2014 Before + After" : feature_group_879f563b7619c1898f26ece6f93436b8,
+                },
+            };
+            let layer_control_cff3f5a808b1076843b24e14aacc91ad = L.control.layers(
+                layer_control_cff3f5a808b1076843b24e14aacc91ad_layers.base_layers,
+                layer_control_cff3f5a808b1076843b24e14aacc91ad_layers.overlays,
+                {
+  "position": "topright",
+  "collapsed": false,
+  "autoZIndex": true,
+}
+            ).addTo(map_dfda8f63f4ebb46828997ad6554c0746);
+
+        
+</script>
+</html>
